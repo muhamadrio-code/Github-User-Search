@@ -4,9 +4,9 @@ import com.muhammadrio.githubuser.model.QueryResult
 
 sealed class SearchResponse {
     data class OnSuccess(val data: QueryResult) : SearchResponse() {
-        val dataExist = data.items.isNotEmpty()
+        val dataIsExist = data.items.isNotEmpty()
     }
     object OnValidationFailed : SearchResponse()
     object OnServiceUnavailable : SearchResponse()
-    object OnFailed : SearchResponse()
+    class OnUnknownError(val errorCode:Int) : SearchResponse()
 }

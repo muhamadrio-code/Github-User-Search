@@ -2,10 +2,22 @@
     <string name="app_name">Github User</string>
     <string name="search">search</string>
     <string name="find_user">Find User</string>
+    <string name="people">People</string>
     <string name="tap_search_icon">Tap \"search icon\" \n untuk memulai</string>
-    <string name="validation_failed">Validasi gagal, mohon hubungi developwe</string>
-    <string name="user_not_found">User tidak ditemukan</string>
-    <string name="service_unavailable">Service tidak tersedia sekarang, coba lagi nanti</string>
+
+    <string name="validation_failed_tittle">Opps..!!</string>
+    <string name="validation_failed">Sepertinya anda menggunakan versi lawas, install versi terbaru untuk melanjutkan!!.</string>
+
+    <string name="user_not_found_tittle">User tidak ditemukan.</string>
+    <string name="user_not_found">Sepertinya user yang anda cari tidak ditemukan, user tidak terdaftar atau keyword yang kamu masukkan salah.</string>
+
+    <string name="service_unavailable_tittle">Opps..!!</string>
+    <string name="service_unavailable">Service tidak tersedia sekarang, coba lagi nanti.</string>
+
+    <string name="unknown_tittle">Opps..!!</string>
+    <string name="unknown_message">Terjadi masalah pada aplikasi: %d</string>
+
     <string name="search_hint">Cari</string>
     <string name="app_label">Github User</string>
+    <string name="default_snackbar_action">Close</string>
 </resources>

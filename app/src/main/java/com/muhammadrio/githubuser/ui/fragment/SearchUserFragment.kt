@@ -12,22 +12,25 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.SearchResponse
 import com.muhammadrio.githubuser.databinding.FragmentSearchUserBinding
 import com.muhammadrio.githubuser.provider.SuggestionProvider
+import com.muhammadrio.githubuser.showSnackBar
 import com.muhammadrio.githubuser.showToast
-import com.muhammadrio.githubuser.viewmodel.SearchUserViewModel
+import com.muhammadrio.githubuser.viewmodel.UserViewModel
 
 class SearchUserFragment : Fragment(),
     SearchView.OnQueryTextListener,
-    SearchView.OnSuggestionListener {
+    SearchView.OnSuggestionListener
+{
 
     private lateinit var binding: FragmentSearchUserBinding
     private lateinit var suggestionProvider: SearchRecentSuggestions
     private lateinit var searchView: SearchView
-    private val viewModel : SearchUserViewModel by viewModels()
+    private val viewModel : UserViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,28 +39,7 @@ class SearchUserFragment : Fragment(),
     ): View {
         binding = FragmentSearchUserBinding.inflate(layoutInflater)
         setupToolbar()
-        subscribeObserver()
         return binding.root
-    }
-
-    private fun subscribeObserver(){
-        viewModel.searchResponse.observe(viewLifecycleOwner){ response ->
-            when(response){
-                is SearchResponse.OnSuccess -> {
-                    if(response.dataExist){
-                        requireContext().showToast("Response OnSuccess Data Exist")
-                    } else {
-                        requireContext().showToast("Response OnSuccess Data Not Exist")
-                    }
-                }
-                is SearchResponse.OnServiceUnavailable ->
-                    requireContext().showToast("Response Failed OnServiceUnavailable")
-                is SearchResponse.OnValidationFailed ->
-                    requireContext().showToast("Response Failed OnValidationFailed")
-                is SearchResponse.OnFailed ->
-                    requireContext().showToast("Response Failed OnValidationFailed")
-            }
-        }
     }
 
     private fun setupToolbar() {
@@ -92,8 +74,13 @@ class SearchUserFragment : Fragment(),
         query ?: return false
         suggestionProvider.saveRecentQuery(query,null)
         viewModel.searchUsers(query)
+        navigateToFragmentResult()
         return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean = false
+
+    private fun navigateToFragmentResult(){
+        findNavController().navigate(R.id.action_searchUserFragment_to_searchResultFragment)
+    }
 }

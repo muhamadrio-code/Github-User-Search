@@ -5,11 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.muhammadrio.githubuser.repository.UserRepository
 import kotlinx.coroutines.launch
 
-class SearchUserViewModel : ViewModel() {
+class UserViewModel : ViewModel() {
 
     private val userRepo : UserRepository = UserRepository()
 
-    val searchResponse = userRepo.searchResponse
+    val searchEvent = userRepo.searchEvent
 
     fun searchUsers(query:String) {
         viewModelScope.launch {
