@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Github User</string>
+    <string name="search">search</string>
+    <string name="find_user">Find User</string>
+    <string name="tap_search_icon">Tap \"search icon\" \n untuk memulai</string>
+    <string name="validation_failed">Validasi gagal, mohon hubungi developwe</string>
+    <string name="user_not_found">User tidak ditemukan</string>
+    <string name="service_unavailable">Service tidak tersedia sekarang, coba lagi nanti</string>
+    <string name="search_hint">Cari</string>
+    <string name="app_label">Github User</string>
 </resources>
