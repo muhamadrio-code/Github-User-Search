@@ -1,4 +1,4 @@
-package com.muhammadrio.githubuser.service
+package com.muhammadrio.githubuser.network
 
 import com.muhammadrio.githubuser.BuildConfig
 import okhttp3.Interceptor

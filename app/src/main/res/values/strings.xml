@@ -1,23 +1,35 @@
 <resources>
     <string name="app_name">Github User</string>
     <string name="search">search</string>
-    <string name="find_user">Find User</string>
+    <string name="search_user">Search User</string>
     <string name="people">People</string>
-    <string name="tap_search_icon">Tap \"search icon\" \n untuk memulai</string>
+
+    <string name="no_data_tittle">No data</string>
+    <string name="no_data_message">Data tidak ada.</string>
 
     <string name="validation_failed_tittle">Opps..!!</string>
-    <string name="validation_failed">Sepertinya anda menggunakan versi lawas, install versi terbaru untuk melanjutkan!!.</string>
+    <string name="validation_failed_message">Terjadi kesalahan.</string>
 
     <string name="user_not_found_tittle">User tidak ditemukan.</string>
-    <string name="user_not_found">Sepertinya user yang anda cari tidak ditemukan, user tidak terdaftar atau keyword yang kamu masukkan salah.</string>
+    <string name="user_not_found_message">Sepertinya user yang anda cari tidak ditemukan, user tidak terdaftar atau keyword yang kamu masukkan salah.</string>
 
     <string name="service_unavailable_tittle">Opps..!!</string>
     <string name="service_unavailable">Service tidak tersedia sekarang, coba lagi nanti.</string>
 
-    <string name="unknown_tittle">Opps..!!</string>
-    <string name="unknown_message">Terjadi masalah pada aplikasi: %d</string>
+    <string name="unknown_error_tittle">Opps..!!</string>
+    <string name="unknown_error_message">Terjadi masalah, coba lagi nanti.</string>
+
+    <string name="connection_failed_tittle">Koneksi Gagal.</string>
+    <string name="connection_failed_message">Koneksi terganggu, pastikan kamu terkoneksi ke internet.</string>
+
+    <string name="resource_not_found_tittle">404 Not Found.</string>
+    <string name="resource_not_found_message">Resource tidak ditemukan.</string>
+
+    <string name="not_modified_tittle">304 Not Modified.</string>
+    <string name="not_modified_message">Error, resource tidak tersedia.</string>
 
     <string name="search_hint">Cari</string>
     <string name="app_label">Github User</string>
     <string name="default_snackbar_action">Close</string>
+    <string name="waiting">Menunggu</string>
 </resources>

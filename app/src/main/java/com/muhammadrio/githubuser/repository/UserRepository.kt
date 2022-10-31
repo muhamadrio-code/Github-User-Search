@@ -1,45 +1,112 @@
 package com.muhammadrio.githubuser.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.muhammadrio.githubuser.Event
-import com.muhammadrio.githubuser.SearchResponse
-import com.muhammadrio.githubuser.model.QueryResult
-import com.muhammadrio.githubuser.service.Retrofit
+import com.muhammadrio.githubuser.R
+import com.muhammadrio.githubuser.model.User
+import com.muhammadrio.githubuser.network.ErrorMessage
+import com.muhammadrio.githubuser.network.Result
+import com.muhammadrio.githubuser.network.Retrofit
 import retrofit2.Response
-import java.io.IOException
+import java.net.UnknownHostException
 
 class UserRepository {
 
     private val userApi = Retrofit.userApi
 
-    private val _searchEvent = MutableLiveData<Event<SearchResponse>>()
-    val searchEvent : LiveData<Event<SearchResponse>> = _searchEvent
-
-    suspend fun searchUsers(q:String){
-        runCatching {
-            userApi.searchUsers(q)
-        }.onFailure { e ->
-            if (e is IOException) e.printStackTrace()
-            _searchEvent.value = Event(SearchResponse.OnUnknownError(-1))
-        }.onSuccess {response ->
+    suspend fun getUser(username:String) : Result<User> {
+        return runCatching {
+            val response = userApi.getUser(username)
             handleResponse(response)
+        }.getOrElse { t ->
+            handleException(t)
         }
     }
 
-    private fun handleResponse(response: Response<QueryResult>){
-        when (response.code()){
-            in 200..300 -> handleResponseSuccess(response)
-            304 -> _searchEvent.value = Event(SearchResponse.OnUnknownError(response.code()))
-            422 -> _searchEvent.value = Event(SearchResponse.OnValidationFailed)
-            503 -> _searchEvent.value = Event(SearchResponse.OnServiceUnavailable)
+    suspend fun searchUsers(q:String) : Result<List<User>> {
+       return runCatching {
+           val response = userApi.searchUsers(q)
+           when(val result = handleResponse(response)){
+               is Result.Success -> Result.Success(result.value.items)
+               is Result.Failure -> result
+           }
+        }.getOrElse { t ->
+            handleException(t)
         }
     }
 
-    private fun handleResponseSuccess(response: Response<QueryResult>) {
-        val body = response.body()
-        body?.let { queryResult ->
-            _searchEvent.value = Event(SearchResponse.OnSuccess(queryResult))
+    private fun <T>handleException(throwable:Throwable) : Result<T> {
+        throwable.printStackTrace()
+        return when(throwable){
+            is UnknownHostException -> Result.Failure(
+                ErrorMessage(
+                    header = R.string.connection_failed_tittle,
+                    body = R.string.connection_failed_message,
+                    code = Retrofit.CONNECTION_ERROR_CODE
+                ),
+                throwable
+            )
+            else -> Result.Failure(
+                ErrorMessage(
+                    header = R.string.unknown_error_tittle,
+                    body = R.string.unknown_error_message,
+                    code = Retrofit.UNKNOWN_ERROR_CODE
+                ),
+                throwable
+            )
+        }
+    }
+
+    private fun <T>handleResponse(response: Response<T>): Result<T> {
+        return when (response.code()){
+            in 200..300 -> {
+                val body = response.body()
+                response.errorBody()
+                if (body != null) {
+                    Result.Success(body)
+                } else {
+                    Result.Failure(
+                        ErrorMessage(
+                            header = R.string.unknown_error_tittle,
+                            body = R.string.unknown_error_message,
+                            code = response.code()
+                        )
+                    )
+                }
+            }
+            304 -> Result.Failure(
+                ErrorMessage(
+                    header = R.string.not_modified_tittle,
+                    body = R.string.not_modified_message,
+                    code = response.code()
+                )
+            )
+            422 -> Result.Failure(
+                ErrorMessage(
+                    header = R.string.validation_failed_tittle,
+                    body = R.string.validation_failed_message,
+                    code = response.code()
+                )
+            )
+            404 -> Result.Failure(
+                ErrorMessage(
+                    header = R.string.resource_not_found_tittle,
+                    body = R.string.resource_not_found_message,
+                    code = response.code()
+                )
+            )
+            503 -> Result.Failure(
+                ErrorMessage(
+                    header = R.string.service_unavailable_tittle,
+                    body = R.string.service_unavailable,
+                    code = response.code()
+                )
+            )
+            else -> Result.Failure(
+                ErrorMessage(
+                    header = R.string.unknown_error_tittle,
+                    body = R.string.unknown_error_message,
+                    code = response.code()
+                )
+            )
         }
     }
 

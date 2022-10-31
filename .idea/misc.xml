@@ -3,11 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/RIO/Project/GithubUser/app/src/main/res/drawable/ic_box_empty.xml" value="0.22552083333333334" />
         <entry key="..\:/Users/RIO/Project/GithubUser/app/src/main/res/drawable/ic_search.xml" value="0.22552083333333334" />
         <entry key="..\:/Users/RIO/Project/GithubUser/app/src/main/res/font/bevan.xml" value="0.23958333333333334" />
         <entry key="..\:/Users/RIO/Project/GithubUser/app/src/main/res/layout/activity_main.xml" value="0.209375" />
+        <entry key="..\:/Users/RIO/Project/GithubUser/app/src/main/res/layout/dialog_loading.xml" value="0.25" />
+        <entry key="..\:/Users/RIO/Project/GithubUser/app/src/main/res/layout/fragment_details.xml" value="0.209375" />
         <entry key="..\:/Users/RIO/Project/GithubUser/app/src/main/res/layout/fragment_search_result.xml" value="0.25" />
-        <entry key="..\:/Users/RIO/Project/GithubUser/app/src/main/res/layout/fragment_search_user.xml" value="0.2" />
+        <entry key="..\:/Users/RIO/Project/GithubUser/app/src/main/res/layout/fragment_search_user.xml" value="0.22" />
         <entry key="..\:/Users/RIO/Project/GithubUser/app/src/main/res/layout/user_item.xml" value="0.25" />
         <entry key="..\:/Users/RIO/Project/GithubUser/app/src/main/res/menu/search_menu.xml" value="0.209375" />
         <entry key="..\:/Users/RIO/Project/GithubUser/app/src/main/res/xml/searchable.xml" value="0.209375" />

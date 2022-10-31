@@ -1,4 +1,4 @@
-package com.muhammadrio.githubuser.service
+package com.muhammadrio.githubuser.network
 
 import com.muhammadrio.githubuser.BuildConfig
 import okhttp3.OkHttpClient
@@ -7,6 +7,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object Retrofit {
+
+    const val CONNECTION_ERROR_CODE = 1600
+    const val UNKNOWN_ERROR_CODE = 1580
 
     private val client = OkHttpClient.Builder().apply {
         val loggingInterceptor = if(BuildConfig.DEBUG) {

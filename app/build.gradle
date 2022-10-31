@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -52,12 +53,13 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
-//    implementation "androidx.activity:activity-ktx:1.6.1"
+    implementation 'androidx.activity:activity-ktx:1.5.1'
     implementation "androidx.fragment:fragment-ktx:1.5.4"
 
+    //ViewPager2
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 
     //navigation
-    def nav_version = "2.5.3"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 
@@ -73,5 +75,9 @@ dependencies {
     def coroutines_version = "1.6.4"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
+
+    //airbnb lottie
+    def lottieVersion = "5.2.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 
 }
