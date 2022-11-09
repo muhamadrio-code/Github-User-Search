@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muhammadrio.githubuser.model.User
 import com.muhammadrio.githubuser.model.UserDetails
+import com.muhammadrio.githubuser.network.ErrorMessage
+import com.muhammadrio.githubuser.network.QueryStatus
 import com.muhammadrio.githubuser.network.Result
 import com.muhammadrio.githubuser.repository.UserRepository
 import kotlinx.coroutines.launch
@@ -13,32 +15,73 @@ import kotlinx.coroutines.launch
 class UserViewModel : ViewModel() {
 
     private val userRepo : UserRepository = UserRepository()
+    private var currentPage = 1
+    private lateinit var loginName: String
 
-    private val _queryStatus = MutableLiveData<QueryStatus<List<User>>>(QueryStatus.OnEmpty)
-    val queryStatus : LiveData<QueryStatus<List<User>>> = _queryStatus
+    private val tempUsers = mutableSetOf<User>()
 
-    private val _userDetails = MutableLiveData<QueryStatus<UserDetails>>()
-    val userDetails : LiveData<QueryStatus<UserDetails>> = _userDetails
+    private val _users = MutableLiveData<List<User>>()
+    val users : LiveData<List<User>> = _users
+
+    private val _userDetails = MutableLiveData<UserDetails>()
+    val userDetails : LiveData<UserDetails> = _userDetails
+
+    private val _queryStatus = MutableLiveData<QueryStatus>(QueryStatus.OnEmpty)
+    val queryStatus : LiveData<QueryStatus> = _queryStatus
 
     fun searchUsers(query:String) {
-        _queryStatus.value = QueryStatus.OnLoading
+        loginName = query
+        setToLoadingState()
         viewModelScope.launch {
             val queryResult = userRepo.searchUsers(query)
-            _queryStatus.value = QueryStatus.OnFinished(queryResult)
+            handleSearchUsersResult(queryResult)
+        }
+    }
+
+    fun searchNextPage() {
+        viewModelScope.launch {
+            currentPage++
+            when(val queryResult = userRepo.searchUsers(loginName,currentPage)) {
+                is Result.Failure -> {}
+                is Result.Success -> handleUsers(queryResult.value)
+            }
         }
     }
 
     fun getUserDetails(userLogin:String) {
-        _queryStatus.value = QueryStatus.OnLoading
+        setToLoadingState()
         viewModelScope.launch {
-            val userDetails = userRepo.getUserDetails(userLogin)
-            _userDetails.value = QueryStatus.OnFinished(userDetails)
+            when (val result = userRepo.getUserDetails(userLogin)){
+                is Result.Failure -> setFailureStatusMessage(result.message)
+                is Result.Success -> {
+                    _userDetails.postValue(requireNotNull(result.value))
+                    _queryStatus.value = QueryStatus.OnSuccess
+                }
+            }
         }
     }
 
-    sealed class QueryStatus<out T> {
-        object OnEmpty : QueryStatus<Nothing>()
-        object OnLoading : QueryStatus<Nothing>()
-        data class OnFinished<out T>(val result: Result<T>) : QueryStatus<T>()
+    private fun setToLoadingState() {
+        tempUsers.clear()
+        _queryStatus.value = QueryStatus.OnLoading
+    }
+
+    private fun handleSearchUsersResult(result: Result<List<User>>) {
+        when (result) {
+            is Result.Success -> handleUsers(result.value)
+            is Result.Failure -> setFailureStatusMessage(result.message)
+        }
+    }
+
+    private fun handleUsers(users:List<User>) {
+        if (users.isNotEmpty()) {
+            tempUsers += users
+            _users.postValue(tempUsers.toList())
+        }
+        _queryStatus.value = QueryStatus.OnSuccess
+    }
+
+    private fun setFailureStatusMessage(errorMessage: ErrorMessage) {
+        _queryStatus.value = QueryStatus.OnFailure(errorMessage)
     }
 }

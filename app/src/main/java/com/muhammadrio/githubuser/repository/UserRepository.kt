@@ -13,18 +13,18 @@ class UserRepository {
 
     private val userApi = Retrofit.userApi
 
-    suspend fun getUserDetails(username:String) : Result<UserDetails> {
+    suspend fun getUserDetails(userLogin:String) : Result<UserDetails> {
         return runCatching {
-            val response = userApi.getUserDetails(username)
+            val response = userApi.getUserDetails(userLogin)
             handleResponse(response)
         }.getOrElse { t ->
             handleException(t)
         }
     }
 
-    suspend fun searchUsers(q:String) : Result<List<User>> {
+    suspend fun searchUsers(q:String,page:Int = 1) : Result<List<User>> {
        return runCatching {
-           val response = userApi.searchUsers(q)
+           val response = userApi.searchUsers(q,page)
            when(val result = handleResponse(response)){
                is Result.Success -> Result.Success(result.value.items)
                is Result.Failure -> result

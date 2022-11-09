@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.os.Bundle
 import android.provider.SearchRecentSuggestions
 import android.text.InputFilter
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +20,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.databinding.FragmentSearchUserBinding
-import com.muhammadrio.githubuser.model.User
-import com.muhammadrio.githubuser.network.Result
+import com.muhammadrio.githubuser.network.QueryStatus
 import com.muhammadrio.githubuser.provider.SuggestionProvider
-import com.muhammadrio.githubuser.showToast
 import com.muhammadrio.githubuser.ui.adapter.UserAdapter
 import com.muhammadrio.githubuser.ui.dialogs.LoadingDialog
 import com.muhammadrio.githubuser.viewmodel.UserViewModel
@@ -77,66 +78,54 @@ class SearchUserFragment : Fragment(),
     private fun subscribeObserver() {
         viewModel.queryStatus.observe(viewLifecycleOwner) { status ->
             when (status) {
-                is UserViewModel.QueryStatus.OnEmpty -> {
+                is QueryStatus.OnEmpty -> {
                     showErrorMessage(
                         R.drawable.ic_box_empty,
                         R.string.no_data_tittle,
                         R.string.no_data_message
                     )
                 }
-                is UserViewModel.QueryStatus.OnFinished -> {
+                is QueryStatus.OnSuccess -> {
                     loadingDialog.dismiss()
-                    handleResult(status.result)
                 }
-                is UserViewModel.QueryStatus.OnLoading -> {
+                is QueryStatus.OnFailure -> {
+                    val message = status.errorMessage
+                    showErrorMessage(
+                        title = message.header,
+                        message = message.body
+                    )
+                    loadingDialog.dismiss()
+                }
+                is QueryStatus.OnLoading -> {
                     hideErrorMessage()
                     hideKeyboard()
                     loadingDialog.show()
                 }
-                else -> {}
             }
         }
-    }
 
-    private fun handleResult(result: Result<List<User>>) {
-        when (result) {
-            is Result.Success -> {
-                val users = result.value
-                if (users.isNotEmpty()) {
-                    binding.rcvUserList.isVisible = true
-                    adapter.submitList(users)
-                } else {
-                    showErrorMessage(
-                        tittle = R.string.user_not_found_tittle,
-                        message = R.string.user_not_found_message
-                    )
-                }
-            }
-            is Result.Failure -> {
-                val errorMessage = result.message
-                showErrorMessage(
-                    tittle = errorMessage.header,
-                    message = errorMessage.body
-                )
-            }
+        viewModel.users.observe(viewLifecycleOwner) { users ->
+            users ?: return@observe
+            binding.rcvUserList.isVisible = true
+            adapter.submitList(users)
         }
     }
 
     private fun showErrorMessage(
         @DrawableRes icon: Int? = null,
-        @StringRes tittle: Int,
+        @StringRes title: Int,
         @StringRes message: Int
     ) {
         binding.apply {
             llErrorMessageContainer.isVisible = true
             rcvUserList.isVisible = false
-            val drawable = icon?.let {
+            val iconDrawable = icon?.let {
                 ContextCompat.getDrawable(requireContext(), it)
             }
-            drawable?.let {
+            iconDrawable?.let {
                 tvMessageHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(null, it, null, null)
             }
-            tvMessageHeader.text = getString(tittle)
+            tvMessageHeader.text = getString(title)
             tvMessageBody.text = getString(message)
         }
     }
@@ -147,6 +136,22 @@ class SearchUserFragment : Fragment(),
         adapter.setOnItemClickListener {
             navigateToDetailsFragment(it.login)
         }
+        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
+        binding.rcvUserList.layoutManager = layoutManager
+
+        val scrollListener = object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val pastItemsVisible  = layoutManager.findFirstVisibleItemPosition()
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+
+                if ((visibleItemCount + pastItemsVisible) >= totalItemCount) {
+                    viewModel.searchNextPage()
+                }
+            }
+        }
+        binding.rcvUserList.addOnScrollListener(scrollListener)
     }
 
     override fun onSuggestionSelect(position: Int): Boolean {

@@ -12,7 +12,8 @@ interface GithubUserApi {
 
     @GET("/search/users")
     suspend fun searchUsers(
-        @Query("q") q:String
+        @Query("q") q:String,
+        @Query("page") page:Int = 1,
     ) : Response<QueryResult>
 
     @GET("/users/{username}")
