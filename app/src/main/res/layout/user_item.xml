@@ -23,7 +23,7 @@
         android:layout_alignTop="@id/ivProfile_picture"
         android:layout_alignBottom="@id/ivProfile_picture"
         android:layout_alignParentEnd="true"
-        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:textSize="20sp"
         android:layout_toEndOf="@id/ivProfile_picture"
         android:gravity="center_vertical"
         tools:text="Muhammad Rio" />

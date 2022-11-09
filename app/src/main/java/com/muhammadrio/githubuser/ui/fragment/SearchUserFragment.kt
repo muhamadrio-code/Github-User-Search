@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.databinding.FragmentSearchUserBinding
 import com.muhammadrio.githubuser.model.User
@@ -144,7 +145,7 @@ class SearchUserFragment : Fragment(),
         adapter = UserAdapter()
         binding.rcvUserList.adapter = adapter
         adapter.setOnItemClickListener {
-            requireContext().showToast("CLicked")
+            navigateToDetailsFragment(it.login)
         }
     }
 
@@ -178,5 +179,10 @@ class SearchUserFragment : Fragment(),
     }
 
     override fun onQueryTextChange(newText: String?): Boolean = false
+
+    private fun navigateToDetailsFragment(userLogin:String) {
+        val action = SearchUserFragmentDirections.actionSearchUserFragmentToDetailsFragment(userLogin)
+        findNavController().navigate(action)
+    }
 
 }

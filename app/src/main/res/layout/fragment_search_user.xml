@@ -44,21 +44,21 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvMessage_header"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             tools:text="@string/no_data_tittle"
+            android:textSize="24sp"
+            android:textStyle="bold"
             android:textAlignment="center"
-            android:fontFamily="@font/bevan"
             tools:drawableTopCompat="@drawable/ic_box_empty"
             app:layout_anchorGravity="center"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvMessage_body"
-            style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="wrap_content"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             tools:text="@string/no_data_message"

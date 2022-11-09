@@ -29,6 +29,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/jetbrains_mono_reguler</item>
     </style>
 
     <style name="MyTheme.App.Toolbar" parent="Widget.MaterialComponents.Toolbar">
@@ -44,5 +45,6 @@
 
     <style name="MyTextAppearance" parent="">
         <item name="android:textStyle">bold</item>
+        <item name="android:textSize">24sp</item>
     </style>
 </resources>

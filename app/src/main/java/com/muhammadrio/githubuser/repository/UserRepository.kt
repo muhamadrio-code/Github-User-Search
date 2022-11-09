@@ -2,6 +2,7 @@ package com.muhammadrio.githubuser.repository
 
 import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.model.User
+import com.muhammadrio.githubuser.model.UserDetails
 import com.muhammadrio.githubuser.network.ErrorMessage
 import com.muhammadrio.githubuser.network.Result
 import com.muhammadrio.githubuser.network.Retrofit
@@ -12,9 +13,9 @@ class UserRepository {
 
     private val userApi = Retrofit.userApi
 
-    suspend fun getUser(username:String) : Result<User> {
+    suspend fun getUserDetails(username:String) : Result<UserDetails> {
         return runCatching {
-            val response = userApi.getUser(username)
+            val response = userApi.getUserDetails(username)
             handleResponse(response)
         }.getOrElse { t ->
             handleException(t)

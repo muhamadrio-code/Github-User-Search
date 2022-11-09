@@ -9,5 +9,17 @@
         android:id="@+id/searchUserFragment"
         android:name="com.muhammadrio.githubuser.ui.fragment.SearchUserFragment"
         android:label="SearchUserFragment"
-        tools:layout="@layout/fragment_search_user"/>
+        tools:layout="@layout/fragment_search_user">
+        <action
+            android:id="@+id/action_searchUserFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.muhammadrio.githubuser.ui.fragment.DetailsFragment"
+        android:label="DetailsFragment" >
+        <argument
+            android:name="user_login"
+            app:argType="string" />
+    </fragment>
 </navigation>

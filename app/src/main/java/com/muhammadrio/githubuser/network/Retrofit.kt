@@ -1,5 +1,6 @@
 package com.muhammadrio.githubuser.network
 
+import com.google.gson.GsonBuilder
 import com.muhammadrio.githubuser.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -24,7 +25,9 @@ object Retrofit {
     private val instance: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(
+                GsonBuilder().serializeNulls().create()
+            ))
             .client(client)
             .build()
     }

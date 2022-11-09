@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="App.TextAppearance.UserDetails" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:textColor">?attr/colorControlNormal</item>
+        <item name="android:fontFamily">@font/jetbrains_mono_reguler</item>
+    </style>
+
+    <style name="App.TextAppearance.Bio" parent="App.TextAppearance.UserDetails">
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="App.TextAppearance.FollowersFollowing" parent="App.TextAppearance.UserDetails">
+        <item name="drawableStartCompat">@drawable/ic_people</item>
+        <item name="android:drawableStart">@drawable/ic_people</item>
+    </style>
+
+    <style name="App.TextAppearance.Repositories" parent="App.TextAppearance.UserDetails">
+        <item name="drawableStartCompat">@drawable/ic_repository</item>
+        <item name="android:drawableStart">@drawable/ic_repository</item>
+        <item name="android:layout_marginBottom">16dp</item>
+    </style>
+
+    <style name="App.TextAppearance.Company" parent="App.TextAppearance.UserDetails">
+        <item name="drawableStartCompat">@drawable/ic_company</item>
+        <item name="android:drawableStart">@drawable/ic_company</item>
+    </style>
+
+    <style name="App.TextAppearance.Hyperlink" parent="App.TextAppearance.UserDetails">
+        <item name="android:textColor">@android:color/holo_blue_bright</item>
+        <item name="drawableStartCompat">@drawable/ic_link</item>
+        <item name="android:drawableStart">@drawable/ic_link</item>
+    </style>
+
+    <style name="App.TextAppearance.Twitter" parent="App.TextAppearance.UserDetails">
+        <item name="drawableStartCompat">@drawable/ic_twitter</item>
+        <item name="android:drawableStart">@drawable/ic_twitter</item>
+    </style>
+</resources>
