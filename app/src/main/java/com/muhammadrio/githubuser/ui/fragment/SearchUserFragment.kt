@@ -6,7 +6,6 @@ import android.database.Cursor
 import android.os.Bundle
 import android.provider.SearchRecentSuggestions
 import android.text.InputFilter
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -125,8 +124,8 @@ class SearchUserFragment : Fragment(),
             iconDrawable?.let {
                 tvMessageHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(null, it, null, null)
             }
-            tvMessageHeader.text = getString(title)
-            tvMessageBody.text = getString(message)
+            tvMessageHeader.text = runCatching { getString(title) }.getOrNull()
+            tvMessageBody.text = runCatching { getString(message) }.getOrNull()
         }
     }
 

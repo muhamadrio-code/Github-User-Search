@@ -34,6 +34,24 @@ class UserRepository {
         }
     }
 
+    suspend fun getFollowers(userLogin: String) : Result<List<User>> {
+        return runCatching {
+            val response = userApi.getFollowers(userLogin)
+            handleResponse(response)
+        }.getOrElse { t ->
+            handleException(t)
+        }
+    }
+
+    suspend fun getFollowing(userLogin: String) : Result<List<User>> {
+        return runCatching {
+            val response = userApi.getFollowing(userLogin)
+            handleResponse(response)
+        }.getOrElse { t ->
+            handleException(t)
+        }
+    }
+
     private fun <T>handleException(throwable:Throwable) : Result<T> {
         throwable.printStackTrace()
         return when(throwable){

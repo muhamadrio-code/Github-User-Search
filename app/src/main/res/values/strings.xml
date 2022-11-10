@@ -31,11 +31,16 @@
     <string name="search_hint">Cari</string>
     <string name="app_label">Github User</string>
     <string name="default_snackbar_action">Close</string>
-    <string name="waiting">Menunggu</string>
+
+    <string name="no_followers">User tidak memiliki pengikut.</string>
+    <string name="no_following">User tidak mengikuti siapapun.</string>
 
     <string name="followers_following">%d Followers &#183; %d Following </string>
     <string name="repositories">%d Repositories</string>
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <string name="menyiapkan">Menyiapkan</string>
+    <string name="profile_picture">profile picture</string>
+    <string name="refresh">Refresh</string>
+    <string name="go_back">Go back</string>
 </resources>
