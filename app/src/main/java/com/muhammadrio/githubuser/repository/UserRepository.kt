@@ -1,6 +1,7 @@
 package com.muhammadrio.githubuser.repository
 
 import com.muhammadrio.githubuser.R
+import com.muhammadrio.githubuser.model.QueryResult
 import com.muhammadrio.githubuser.model.User
 import com.muhammadrio.githubuser.model.UserDetails
 import com.muhammadrio.githubuser.network.ErrorMessage
@@ -25,12 +26,37 @@ class UserRepository {
     suspend fun searchUsers(q:String,page:Int = 1) : Result<List<User>> {
        return runCatching {
            val response = userApi.searchUsers(q,page)
-           when(val result = handleResponse(response)){
+           when(val result = parseResponse(response)){
                is Result.Success -> Result.Success(result.value.items)
                is Result.Failure -> result
            }
         }.getOrElse { t ->
             handleException(t)
+        }
+    }
+
+    suspend fun getFollowers(userLogin: String) : Result<List<User>> {
+        return runCatching {
+            val response = userApi.getFollowers(userLogin)
+            parseResponse(response)
+        }.getOrElse { t ->
+            handleException(t)
+        }
+    }
+
+    suspend fun getFollowing(userLogin: String) : Result<List<User>> {
+        return runCatching {
+            val response = userApi.getFollowing(userLogin)
+            parseResponse(response)
+        }.getOrElse { t ->
+            handleException(t)
+        }
+    }
+
+    private fun <T>parseResponse(response: Response<T>) : Result<T> {
+        return when(val result = handleResponse(response)){
+            is Result.Success -> Result.Success(result.value)
+            is Result.Failure -> result
         }
     }
 

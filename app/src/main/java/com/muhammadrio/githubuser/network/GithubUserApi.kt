@@ -16,8 +16,19 @@ interface GithubUserApi {
         @Query("page") page:Int = 1,
     ) : Response<QueryResult>
 
-    @GET("/users/{username}")
+    @GET("/users/{userLogin}")
     suspend fun getUserDetails(
-        @Path("username") userLogin:String
+        @Path("userLogin") userLogin:String
     ) : Response<UserDetails>
+
+    @GET("/users/{userLogin}/followers")
+    suspend fun getFollowers(
+        @Path("userLogin") userLogin:String
+    ) : Response<List<User>>
+
+    @GET("/users/{userLogin}/following")
+    suspend fun getFollowing(
+        @Path("userLogin") userLogin:String
+    ) : Response<List<User>>
+
 }

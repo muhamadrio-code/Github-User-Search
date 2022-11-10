@@ -1,6 +1,9 @@
 package com.muhammadrio.githubuser.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StyleRes
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -16,20 +20,20 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.airbnb.paris.extensions.style
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.textview.MaterialTextView
 import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.databinding.FragmentDetailsBinding
 import com.muhammadrio.githubuser.model.UserDetails
-import com.muhammadrio.githubuser.network.QueryStatus
-import com.muhammadrio.githubuser.ui.dialogs.LoadingDialog
-import com.muhammadrio.githubuser.viewmodel.UserViewModel
+import com.muhammadrio.githubuser.network.Result
+import com.muhammadrio.githubuser.ui.adapter.ConnectedPeopleAdapter
+import com.muhammadrio.githubuser.viewmodel.UserDetailsViewModel
 
 class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
     private val args: DetailsFragmentArgs by navArgs()
-    private val viewModel: UserViewModel by viewModels()
-    private lateinit var loadingDialog: LoadingDialog
+    private val viewModel: UserDetailsViewModel by viewModels()
 
     private var offsetChangedListener: AppBarLayout.OnOffsetChangedListener? = null
 
@@ -44,9 +48,10 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDetailsBinding.inflate(layoutInflater)
-        loadingDialog = LoadingDialog(requireActivity())
         subscribeObserver()
         setupListener()
+        setupViewpager()
+        setupTabLayout()
         return binding.root
     }
 
@@ -76,30 +81,31 @@ class DetailsFragment : Fragment() {
         val tv = MaterialTextView(requireContext())
         tv.text = text
         tv.style(style)
+        val linkify = Linkify.addLinks(tv, Linkify.WEB_URLS)
+        if (linkify) {
+            tv.movementMethod = LinkMovementMethod.getInstance()
+        }
+
         tv.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, 0,0,0)
         return tv
     }
 
     private fun subscribeObserver() {
-        viewModel.queryStatus.observe(viewLifecycleOwner) { status ->
-            when (status) {
-                is QueryStatus.OnEmpty -> {}
-                is QueryStatus.OnSuccess -> {
-                    loadingDialog.dismiss()
-                }
-                is QueryStatus.OnFailure -> {
-                    Toast.makeText(requireContext(), getString(status.errorMessage.body), Toast.LENGTH_LONG).show()
+        viewModel.userDetails.observe(viewLifecycleOwner) { result ->
+            result ?: return@observe
+            when(result) {
+                is Result.Failure -> {
+                    Toast.makeText(requireContext(), getString(result.errorMessage.body), Toast.LENGTH_LONG).show()
                     popBackStack()
                 }
-                is QueryStatus.OnLoading -> {
-                    loadingDialog.show()
+                is Result.Success -> {
+                    result.value.login?.let {
+                        viewModel.getFollowersList(it)
+                        viewModel.getFollowingList(it)
+                    }
+                    setupContent(result.value)
                 }
             }
-        }
-
-        viewModel.userDetails.observe(viewLifecycleOwner) { userDetails ->
-            userDetails ?: return@observe
-            setupContent(userDetails)
         }
     }
 
@@ -141,6 +147,13 @@ class DetailsFragment : Fragment() {
         val name = userDetails.name ?: userDetails.login
         val login = userDetails.login
 
+        userDetails.html_url?.let { url ->
+            binding.githubBtn.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW,url.toUri())
+                startActivity(intent)
+            }
+        }
+
         binding.apply {
             detailContainer.apply {
                 removeAllViews()
@@ -151,6 +164,7 @@ class DetailsFragment : Fragment() {
                 companyTv?.let { addView(it) }
                 twitterTv?.let { addView(it) }
             }
+
 
             tvUserLogin.text = login
             tvUserName.text = name
@@ -166,6 +180,21 @@ class DetailsFragment : Fragment() {
 
     private fun popBackStack() {
         findNavController().popBackStack()
+    }
+
+    private fun setupViewpager(){
+        val vpAdapter = ConnectedPeopleAdapter(childFragmentManager, lifecycle)
+        binding.viewPager.adapter = vpAdapter
+    }
+
+    private fun setupTabLayout() {
+        val tabs = listOf(
+            getString(R.string.followers),
+            getString(R.string.following)
+        )
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            tab.text = tabs[position]
+        }.attach()
     }
 
 }
