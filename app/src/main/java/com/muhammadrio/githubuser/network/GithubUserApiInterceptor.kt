@@ -14,6 +14,6 @@ class GithubUserApiInterceptor : Interceptor {
     }
 
     companion object {
-        private const val AUTH_TOKEN = "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"
+        private const val AUTH_TOKEN = "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"
     }
 }
