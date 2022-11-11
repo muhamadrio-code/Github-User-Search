@@ -27,7 +27,7 @@ class UserRepository {
            val response = userApi.searchUsers(q,page)
            when(val result = handleResponse(response)){
                is Result.Success -> Result.Success(result.value.items)
-               is Result.Failure -> result
+               else ->  result as Result.Failure
            }
         }.getOrElse { t ->
             handleException(t)
@@ -78,7 +78,6 @@ class UserRepository {
         return when (response.code()){
             in 200..300 -> {
                 val body = response.body()
-                response.errorBody()
                 if (body != null) {
                     Result.Success(body)
                 } else {

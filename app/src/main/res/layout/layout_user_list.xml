@@ -12,6 +12,8 @@
         android:layout_height="match_parent"
         android:overScrollMode="never"
         android:visibility="gone"
+        android:paddingVertical="8dp"
+        android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:itemCount="16"
         tools:listitem="@layout/user_item" />

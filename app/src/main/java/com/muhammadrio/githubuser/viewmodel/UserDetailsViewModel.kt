@@ -4,10 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.model.User
 import com.muhammadrio.githubuser.model.UserDetails
-import com.muhammadrio.githubuser.network.ErrorMessage
 import com.muhammadrio.githubuser.network.Result
 import com.muhammadrio.githubuser.repository.UserRepository
 import kotlinx.coroutines.launch
@@ -34,14 +32,14 @@ class UserDetailsViewModel : ViewModel() {
         }
     }
 
-    fun getFollowersList(userLogin: String) {
+    fun getFollowers(userLogin: String) {
         viewModelScope.launch {
             val result = userRepo.getFollowers(userLogin)
             _followers.postValue(result)
         }
     }
 
-    fun getFollowingList(userLogin: String) {
+    fun getFollowing(userLogin: String) {
         viewModelScope.launch {
             val result = userRepo.getFollowing(userLogin)
             _following.postValue(result)
@@ -49,8 +47,8 @@ class UserDetailsViewModel : ViewModel() {
     }
 
     fun refreshOnFailure() {
-        if (followers.value is Result.Failure) getFollowersList(mUserLogin)
-        if (following.value is Result.Failure) getFollowingList(mUserLogin)
+        if (followers.value is Result.Failure) getFollowers(mUserLogin)
+        if (following.value is Result.Failure) getFollowing(mUserLogin)
     }
 
 

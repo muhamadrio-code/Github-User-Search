@@ -100,8 +100,8 @@ class DetailsFragment : Fragment() {
                 }
                 is Result.Success -> {
                     result.value.login?.let {
-                        viewModel.getFollowersList(it)
-                        viewModel.getFollowingList(it)
+                        viewModel.getFollowers(it)
+                        viewModel.getFollowing(it)
                     }
                     setupContent(result.value)
                 }
@@ -164,7 +164,6 @@ class DetailsFragment : Fragment() {
                 companyTv?.let { addView(it) }
                 twitterTv?.let { addView(it) }
             }
-
 
             tvUserLogin.text = login
             tvUserName.text = name

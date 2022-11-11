@@ -111,19 +111,15 @@ class SearchUserFragment : Fragment(),
     }
 
     private fun showErrorMessage(
-        @DrawableRes icon: Int? = null,
+        @DrawableRes icon: Int = 0,
         @StringRes title: Int,
         @StringRes message: Int
     ) {
         binding.apply {
             llErrorMessageContainer.isVisible = true
             rcvUserList.isVisible = false
-            val iconDrawable = icon?.let {
-                ContextCompat.getDrawable(requireContext(), it)
-            }
-            iconDrawable?.let {
-                tvMessageHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(null, it, null, null)
-            }
+            val iconDrawable = runCatching { ContextCompat.getDrawable(requireContext(), icon) }.getOrNull()
+            tvMessageHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(null, iconDrawable, null, null)
             tvMessageHeader.text = runCatching { getString(title) }.getOrNull()
             tvMessageBody.text = runCatching { getString(message) }.getOrNull()
         }
@@ -167,6 +163,7 @@ class SearchUserFragment : Fragment(),
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         query ?: return false
+        if(query.isBlank() or query.isEmpty()) return false
         suggestionProvider.saveRecentQuery(query, null)
         viewModel.searchUsers(query)
         return true

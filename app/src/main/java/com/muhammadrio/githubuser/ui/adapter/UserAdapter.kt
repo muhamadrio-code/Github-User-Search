@@ -15,8 +15,13 @@ class UserAdapter : ListAdapter<User, UserAdapter.UserViewHolder>(DiffCallback()
 
     private var clickListener: ((User) -> Unit)? = null
 
-    inner class UserViewHolder(private val binding: UserItemBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(item:User){
+    inner class UserViewHolder(private val binding: UserItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: User) {
+            binding.root.layoutParams = RecyclerView.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             binding.tvUserName.text = item.login
             binding.ivProfilePicture.load(item.avatarUrl, builder = {
                 placeholder(R.drawable.image_placeholder)
@@ -29,7 +34,7 @@ class UserAdapter : ListAdapter<User, UserAdapter.UserViewHolder>(DiffCallback()
         }
     }
 
-    fun setOnItemClickListener(listener:(User) -> Unit){
+    fun setOnItemClickListener(listener: (User) -> Unit) {
         clickListener = listener
     }
 

@@ -37,11 +37,11 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:background="@drawable/circle_shape"
-                    android:minHeight="60dp"
                     android:contentDescription="@string/profile_picture"
-                    app:layout_constraintHorizontal_bias="0.5"
+                    android:minHeight="60dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ImageContrastCheck" />
 
                 <TextView
                     android:id="@+id/tvUserName"
@@ -149,9 +149,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             app:layout_collapseMode="pin"
-            app:tabMode="fixed"
             app:tabGravity="fill"
-            app:tabTextAppearance="@style/TextAppearance.App.Button"/>
+            app:tabMaxWidth="0dp"
+            app:tabMode="fixed"
+            app:tabTextAppearance="@style/TextAppearance.App.Button"
+            tools:ignore="SpeakableTextPresentCheck" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager2.widget.ViewPager2
