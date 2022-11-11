@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.model.User
 import com.muhammadrio.githubuser.network.ErrorMessage
 import com.muhammadrio.githubuser.network.QueryStatus
@@ -55,11 +56,19 @@ class UserViewModel : ViewModel() {
     }
 
     private fun handleUsers(users: List<User>) {
-        if (users.isNotEmpty()) {
-            tempUsers += users
-            _users.postValue(tempUsers.toList())
+        tempUsers += users
+        _users.postValue(tempUsers.toList())
+        _queryStatus.value =  if (users.isNotEmpty()) {
+            QueryStatus.OnSuccess
+        } else {
+            QueryStatus.OnFailure(
+                ErrorMessage(
+                    R.string.user_not_found_tittle,
+                    R.string.user_not_found_message,
+                    0
+                )
+            )
         }
-        _queryStatus.value = QueryStatus.OnSuccess
     }
 
     private fun setFailureStatusMessage(errorMessage: ErrorMessage) {
