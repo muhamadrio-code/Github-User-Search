@@ -72,8 +72,7 @@ class DetailsFragment : Fragment() {
         binding.appbarLayout.removeOnOffsetChangedListener(offsetChangedListener)
     }
 
-    private fun setupToolbar(title: String, subtitle: String) {
-        binding.toolbarSubtitle.text = subtitle
+    private fun setupToolbar(title: String) {
         binding.toolbarTitle.text = title
     }
 
@@ -173,8 +172,8 @@ class DetailsFragment : Fragment() {
                 error(R.drawable.ic_broken_image)
             }
         }
-        val subtitle = getString(R.string.repositories, userDetails.public_repos)
-        name?.let { setupToolbar(title = name, subtitle = subtitle) }
+
+        name?.let { setupToolbar(title = name) }
     }
 
     private fun popBackStack() {

@@ -49,7 +49,7 @@ class SearchUserFragment : Fragment(),
         setupToolbar()
         setupRecyclerView()
         subscribeObserver()
-        loadingDialog = LoadingDialog(requireActivity())
+        loadingDialog = LoadingDialog(requireContext())
         return binding.root
     }
 

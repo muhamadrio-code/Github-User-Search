@@ -81,6 +81,8 @@
                 android:layout_height="?attr/actionBarSize"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
                 app:contentInsetStartWithNavigation="0dp"
                 app:layout_collapseMode="pin">
 
@@ -108,21 +110,11 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:alpha="0"
+                        app:layout_constraintBottom_toBottomOf="@id/navigationBackBtn"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/navigationBackBtn"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/navigationBackBtn"
                         tools:text="John Wick" />
-
-                    <TextView
-                        android:id="@+id/toolbarSubtitle"
-                        style="@style/App.TextAppearance.CollapseToolbar.SubTittle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:alpha="0"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/navigationBackBtn"
-                        app:layout_constraintTop_toBottomOf="@+id/toolbarTitle"
-                        tools:text="48 Repositories" />
 
                     <ImageButton
                         android:id="@+id/navigationBackBtn"
@@ -130,8 +122,8 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:layout_marginStart="16dp"
-                        android:contentDescription="@string/go_back"
                         android:background="@android:color/transparent"
+                        android:contentDescription="@string/go_back"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
