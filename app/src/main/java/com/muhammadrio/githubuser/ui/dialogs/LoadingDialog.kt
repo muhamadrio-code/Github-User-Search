@@ -6,11 +6,13 @@ import androidx.appcompat.app.AlertDialog
 import com.muhammadrio.githubuser.databinding.DialogLoadingBinding
 
 class LoadingDialog(context: Context) : AlertDialog(context) {
-    override fun show() {
+
+    init {
         val view = DialogLoadingBinding.inflate(layoutInflater)
+        view.animationView.enableMergePathsForKitKatAndAbove(true)
         setView(view.root)
         setCancelable(false)
         window?.setBackgroundDrawable(ColorDrawable(0))
-        super.show()
     }
+
 }
