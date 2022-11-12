@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 class UserViewModel : ViewModel() {
 
     private val userRepo: UserRepository = UserRepository()
-    private var currentPage = 1
+    private var userPage = 1
     private lateinit var loginName: String
 
     private val tempUsers = mutableSetOf<User>()
@@ -37,9 +37,9 @@ class UserViewModel : ViewModel() {
 
     fun searchNextPage() {
         viewModelScope.launch {
-            currentPage++
-            val result = userRepo.searchUsers(loginName, currentPage)
-            if (result is Result.Success) handleUsers(result.value)
+            userPage++
+            val result = userRepo.searchNextPage(loginName,userPage)
+            if (result is Result.Success) setUsers(result.value)
         }
     }
 
@@ -50,15 +50,19 @@ class UserViewModel : ViewModel() {
 
     private fun handleSearchUsersResult(result: Result<List<User>>) {
         when (result) {
-            is Result.Success -> handleUsers(result.value)
+            is Result.Success -> handleResultSuccess(result.value)
             is Result.Failure -> setFailureStatusMessage(result.errorMessage)
         }
     }
 
-    private fun handleUsers(users: List<User>) {
+    private fun setUsers(users: List<User>){
         tempUsers += users
         _users.postValue(tempUsers.toList())
-        _queryStatus.value =  if (users.isNotEmpty()) {
+    }
+
+    private fun handleResultSuccess(users: List<User>) {
+        setUsers(users)
+        _queryStatus.value = if (users.isNotEmpty()) {
             QueryStatus.OnSuccess
         } else {
             QueryStatus.OnFailure(

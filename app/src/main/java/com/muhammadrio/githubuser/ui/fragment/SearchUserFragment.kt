@@ -59,7 +59,7 @@ class SearchUserFragment : Fragment(),
         val searchManager =
             requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val inputFilters = arrayOf(
-            InputFilter.LengthFilter(256)
+            InputFilter.LengthFilter(144)
         )
         suggestionProvider =
             SearchRecentSuggestions(
@@ -86,6 +86,7 @@ class SearchUserFragment : Fragment(),
                 }
                 is QueryStatus.OnSuccess -> {
                     loadingDialog.dismiss()
+                    hideErrorMessage()
                 }
                 is QueryStatus.OnFailure -> {
                     val message = status.errorMessage
