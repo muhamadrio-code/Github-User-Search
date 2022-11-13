@@ -37,8 +37,4 @@
         <item name="android:drawableStart">@drawable/ic_link</item>
     </style>
 
-    <style name="App.TextAppearance.Twitter" parent="App.TextAppearance.UserDetails">
-        <item name="drawableStartCompat">@drawable/ic_twitter</item>
-        <item name="android:drawableStart">@drawable/ic_twitter</item>
-    </style>
 </resources>
