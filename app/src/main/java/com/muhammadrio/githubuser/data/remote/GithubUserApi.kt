@@ -1,4 +1,4 @@
-package com.muhammadrio.githubuser.network
+package com.muhammadrio.githubuser.data.remote
 
 import com.muhammadrio.githubuser.model.QueryResult
 import com.muhammadrio.githubuser.model.User

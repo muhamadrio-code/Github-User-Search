@@ -1,4 +1,4 @@
-package com.muhammadrio.githubuser.network
+package com.muhammadrio.githubuser.data.remote
 
 import okhttp3.Interceptor
 import okhttp3.Response

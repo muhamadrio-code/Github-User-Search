@@ -6,13 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muhammadrio.githubuser.model.User
 import com.muhammadrio.githubuser.model.UserDetails
-import com.muhammadrio.githubuser.network.Result
+import com.muhammadrio.githubuser.data.Result
 import com.muhammadrio.githubuser.repository.UserRepository
+import com.muhammadrio.githubuser.repository.UserRepositoryImpl
 import kotlinx.coroutines.launch
 
-class UserDetailsViewModel : ViewModel() {
+class UserDetailsViewModel(
+    private val userRepo: UserRepository
+) : ViewModel() {
 
-    private val userRepo: UserRepository = UserRepository()
     private var mUserLogin = ""
 
     private val _userDetails = MutableLiveData<Result<UserDetails>>()

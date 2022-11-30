@@ -1,8 +1,8 @@
 package com.muhammadrio.githubuser.ui.fragment
 
 import com.muhammadrio.githubuser.R
-import com.muhammadrio.githubuser.network.ErrorMessage
-import com.muhammadrio.githubuser.network.Result
+import com.muhammadrio.githubuser.data.ErrorMessage
+import com.muhammadrio.githubuser.data.Result
 
 class FollowingFragment : ConnectedPeopleFragment() {
     override fun subscribeObserver() {

@@ -6,15 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.model.User
-import com.muhammadrio.githubuser.network.ErrorMessage
-import com.muhammadrio.githubuser.network.QueryStatus
-import com.muhammadrio.githubuser.network.Result
+import com.muhammadrio.githubuser.data.ErrorMessage
+import com.muhammadrio.githubuser.data.QueryStatus
+import com.muhammadrio.githubuser.data.Result
 import com.muhammadrio.githubuser.repository.UserRepository
 import kotlinx.coroutines.launch
 
-class UserViewModel : ViewModel() {
+class UserViewModel(
+    private val userRepository: UserRepository
+) : ViewModel() {
 
-    private val userRepo: UserRepository = UserRepository()
     private var userPage = 1
     private lateinit var loginName: String
 
@@ -30,7 +31,7 @@ class UserViewModel : ViewModel() {
         loginName = query
         setToLoadingState()
         viewModelScope.launch {
-            val queryResult = userRepo.searchUsers(query)
+            val queryResult = userRepository.getUsers(query)
             handleSearchUsersResult(queryResult)
         }
     }
@@ -38,7 +39,7 @@ class UserViewModel : ViewModel() {
     fun searchNextPage() {
         viewModelScope.launch {
             userPage++
-            val result = userRepo.searchNextPage(loginName,userPage)
+            val result = userRepository.getUsersAtPage(loginName,userPage)
             if (result is Result.Success) setUsers(result.value)
         }
     }

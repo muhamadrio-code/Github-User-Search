@@ -1,4 +1,4 @@
-package com.muhammadrio.githubuser.network
+package com.muhammadrio.githubuser.data.remote
 
 import com.google.gson.GsonBuilder
 import com.muhammadrio.githubuser.BuildConfig

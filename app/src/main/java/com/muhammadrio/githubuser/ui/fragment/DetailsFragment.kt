@@ -25,7 +25,7 @@ import com.google.android.material.textview.MaterialTextView
 import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.databinding.FragmentDetailsBinding
 import com.muhammadrio.githubuser.model.UserDetails
-import com.muhammadrio.githubuser.network.Result
+import com.muhammadrio.githubuser.data.Result
 import com.muhammadrio.githubuser.ui.adapter.ConnectedPeopleAdapter
 import com.muhammadrio.githubuser.viewmodel.UserDetailsViewModel
 

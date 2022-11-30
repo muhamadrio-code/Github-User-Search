@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.muhammadrio.githubuser.MainApplication
 import com.muhammadrio.githubuser.databinding.LayoutUserListBinding
 import com.muhammadrio.githubuser.model.User
-import com.muhammadrio.githubuser.network.ErrorMessage
+import com.muhammadrio.githubuser.data.ErrorMessage
 import com.muhammadrio.githubuser.ui.adapter.UserAdapter
 import com.muhammadrio.githubuser.viewmodel.UserDetailsViewModel
+import com.muhammadrio.githubuser.viewmodel.UserDetailsViewModelFactory
 
 abstract class ConnectedPeopleFragment : Fragment() {
 
@@ -20,7 +22,9 @@ abstract class ConnectedPeopleFragment : Fragment() {
 
     protected val viewModel: UserDetailsViewModel by viewModels(
         ownerProducer = { requireParentFragment() },
-        factoryProducer = { defaultViewModelProviderFactory }
+        factoryProducer = { UserDetailsViewModelFactory(
+            (requireActivity().applicationContext as MainApplication).userRepository
+        ) }
     )
 
     override fun onCreateView(

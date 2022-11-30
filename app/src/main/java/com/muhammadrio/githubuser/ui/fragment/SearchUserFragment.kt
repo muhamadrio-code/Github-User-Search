@@ -21,13 +21,15 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.muhammadrio.githubuser.MainApplication
 import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.databinding.FragmentSearchUserBinding
-import com.muhammadrio.githubuser.network.QueryStatus
+import com.muhammadrio.githubuser.data.QueryStatus
 import com.muhammadrio.githubuser.provider.SuggestionProvider
 import com.muhammadrio.githubuser.ui.adapter.UserAdapter
 import com.muhammadrio.githubuser.ui.dialogs.LoadingDialog
 import com.muhammadrio.githubuser.viewmodel.UserViewModel
+import com.muhammadrio.githubuser.viewmodel.UserViewModelFactory
 
 class SearchUserFragment : Fragment(),
     SearchView.OnQueryTextListener,
@@ -37,7 +39,10 @@ class SearchUserFragment : Fragment(),
     private lateinit var suggestionProvider: SearchRecentSuggestions
     private lateinit var searchView: SearchView
     private lateinit var loadingDialog: LoadingDialog
-    private val viewModel: UserViewModel by viewModels()
+    private val viewModel: UserViewModel by viewModels {
+        UserViewModelFactory((requireActivity().applicationContext as MainApplication).userRepository)
+    }
+
     private lateinit var adapter: UserAdapter
 
     override fun onCreateView(

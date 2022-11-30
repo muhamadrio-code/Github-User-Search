@@ -1,28 +1,33 @@
 package com.muhammadrio.githubuser.model
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
+@Entity(
+    tableName = "user_table",
+    primaryKeys = ["id"]
+)
 data class User(
     @SerializedName("avatar_url")
     val avatarUrl: String,
 
     @SerializedName("events_url")
-    val events_url: String,
+    val eventsUrl: String,
 
     @SerializedName("followers_url")
-    val followers_url: String,
+    val followersUrl: String,
 
     @SerializedName("following_url")
-    val following_url: String,
+    val followingUrl: String,
 
     @SerializedName("gists_url")
-    val gists_url: String,
+    val gistsUrl: String,
 
     @SerializedName("gravatar_id")
-    val gravatar_id: String,
+    val gravatarId: String,
 
     @SerializedName("html_url")
-    val html_url: String,
+    val htmlUrl: String,
 
     @SerializedName("id")
     val id: Int,
@@ -31,28 +36,28 @@ data class User(
     val login: String,
 
     @SerializedName("node_id")
-    val node_id: String,
+    val nodeId: String,
 
     @SerializedName("organizations_url")
-    val organizations_url: String,
+    val organizationsUrl: String,
 
     @SerializedName("received_events_url")
-    val received_events_url: String,
+    val receivedEventsUrl: String,
 
     @SerializedName("repos_url")
-    val repos_url: String,
+    val reposUrl: String,
 
     @SerializedName("score")
     val score: Int,
 
     @SerializedName("site_admin")
-    val site_admin: Boolean,
+    val siteAdmin: Boolean,
 
     @SerializedName("starred_url")
-    val starred_url: String,
+    val starredUrl: String,
 
     @SerializedName("subscriptions_url")
-    val subscriptions_url: String,
+    val subscriptionsUrl: String,
 
     @SerializedName("type")
     val type: String,

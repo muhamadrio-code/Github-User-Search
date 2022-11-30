@@ -1,4 +1,4 @@
-package com.muhammadrio.githubuser.network
+package com.muhammadrio.githubuser.data
 
 import androidx.annotation.StringRes
 
