@@ -1,19 +1,22 @@
 package com.muhammadrio.githubuser.viewmodel
 
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.muhammadrio.githubuser.Event
 import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.model.User
 import com.muhammadrio.githubuser.data.ErrorMessage
 import com.muhammadrio.githubuser.data.QueryStatus
 import com.muhammadrio.githubuser.data.Result
 import com.muhammadrio.githubuser.repository.UserRepository
+import com.muhammadrio.githubuser.ui.dialogs.ThemeSelectionDialog
 import kotlinx.coroutines.launch
 
-class UserViewModel(
-    private val userRepository: UserRepository
+class HomeViewModel(
+    private val userRepository: UserRepository,
 ) : ViewModel() {
 
     private var userPage = 1
@@ -26,6 +29,9 @@ class UserViewModel(
 
     private val _queryStatus = MutableLiveData<QueryStatus>(QueryStatus.OnEmpty)
     val queryStatus: LiveData<QueryStatus> = _queryStatus
+
+    private val _showSelectionThemeDialog = MutableLiveData<Event<Boolean>>()
+    val showSelectionThemeDialog: LiveData<Event<Boolean>> = _showSelectionThemeDialog
 
     fun searchUsers(query: String) {
         loginName = query
@@ -78,5 +84,9 @@ class UserViewModel(
 
     private fun setFailureStatusMessage(errorMessage: ErrorMessage) {
         _queryStatus.value = QueryStatus.OnFailure(errorMessage)
+    }
+
+    fun onThemeMenuClicked(){
+        _showSelectionThemeDialog.value = Event(true)
     }
 }

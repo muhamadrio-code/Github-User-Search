@@ -2,11 +2,13 @@ package com.muhammadrio.githubuser
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import androidx.fragment.app.DialogFragment
 import androidx.room.Room
 import com.muhammadrio.githubuser.data.remote.Retrofit
 import com.muhammadrio.githubuser.repository.UserRepository
 import com.muhammadrio.githubuser.repository.UserRepositoryImpl
 import com.muhammadrio.githubuser.data.local.FavoritesUserDatabase
+import com.muhammadrio.githubuser.ui.dialogs.ThemeSelectionDialog
 
 object ServiceLocator {
 
@@ -25,7 +27,7 @@ object ServiceLocator {
 
     private fun createUserRepository(context: Context) : UserRepository {
         return UserRepositoryImpl(
-            createDataBase(context.applicationContext).favoritesUserDao,
+            createDataBase(context).favoritesUserDao,
             Retrofit.userApi
         )
     }

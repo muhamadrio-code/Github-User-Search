@@ -1,16 +1,18 @@
 package com.muhammadrio.githubuser.viewmodel
 
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.muhammadrio.githubuser.repository.UserRepository
+import com.muhammadrio.githubuser.ui.dialogs.ThemeSelectionDialog
 
-class UserViewModelFactory(
+class HomeViewModelFactory(
     private val userRepository: UserRepository
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
-        UserViewModel(userRepository) as T
+        HomeViewModel(userRepository) as T
 }
 
 class UserDetailsViewModelFactory(
