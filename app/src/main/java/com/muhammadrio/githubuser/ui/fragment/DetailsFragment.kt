@@ -22,18 +22,23 @@ import com.airbnb.paris.extensions.style
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.textview.MaterialTextView
+import com.muhammadrio.githubuser.MainApplication
 import com.muhammadrio.githubuser.R
+import com.muhammadrio.githubuser.data.Result
 import com.muhammadrio.githubuser.databinding.FragmentDetailsBinding
 import com.muhammadrio.githubuser.model.UserDetails
-import com.muhammadrio.githubuser.data.Result
 import com.muhammadrio.githubuser.ui.adapter.ConnectedPeopleAdapter
 import com.muhammadrio.githubuser.viewmodel.UserDetailsViewModel
+import com.muhammadrio.githubuser.viewmodel.UserViewModelFactory
 
 class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
+    private lateinit var vpAdapter: ConnectedPeopleAdapter
     private val args: DetailsFragmentArgs by navArgs()
-    private val viewModel: UserDetailsViewModel by viewModels()
+    private val viewModel: UserDetailsViewModel by viewModels {
+        UserViewModelFactory((requireActivity().applicationContext as MainApplication).userRepository)
+    }
 
     private var offsetChangedListener: AppBarLayout.OnOffsetChangedListener? = null
 
@@ -50,8 +55,6 @@ class DetailsFragment : Fragment() {
         binding = FragmentDetailsBinding.inflate(layoutInflater)
         subscribeObserver()
         setupListener()
-        setupViewpager()
-        setupTabLayout()
         return binding.root
     }
 
@@ -76,7 +79,11 @@ class DetailsFragment : Fragment() {
         binding.toolbarTitle.text = title
     }
 
-    private fun buildTextView(@StyleRes style: Int, text: String, @DrawableRes icon: Int): TextView {
+    private fun buildTextView(
+        @StyleRes style: Int,
+        text: String,
+        @DrawableRes icon: Int
+    ): TextView {
         val tv = MaterialTextView(requireContext())
         tv.text = text
         tv.style(style)
@@ -85,22 +92,26 @@ class DetailsFragment : Fragment() {
             tv.movementMethod = LinkMovementMethod.getInstance()
         }
 
-        tv.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, 0,0,0)
+        tv.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, 0, 0, 0)
         return tv
     }
 
     private fun subscribeObserver() {
         viewModel.userDetails.observe(viewLifecycleOwner) { result ->
             result ?: return@observe
-            when(result) {
+            when (result) {
                 is Result.Failure -> {
-                    Toast.makeText(requireContext(), getString(result.errorMessage.body), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(result.errorMessage.body),
+                        Toast.LENGTH_LONG
+                    ).show()
                     popBackStack()
                 }
                 is Result.Success -> {
-                    result.value.login?.let {
-                        viewModel.getFollowers(it)
-                        viewModel.getFollowing(it)
+                    result.value.login?.let { login ->
+                        setupViewpager(login)
+                        setupTabLayout()
                     }
                     setupContent(result.value)
                 }
@@ -129,17 +140,17 @@ class DetailsFragment : Fragment() {
         )
 
         val blogLinkTv = userDetails.blog?.let { link ->
-            if(link.isEmpty() or link.isBlank()) return@let null
-            buildTextView(R.style.App_TextAppearance_Hyperlink, link,R.drawable.ic_link)
+            if (link.isEmpty() or link.isBlank()) return@let null
+            buildTextView(R.style.App_TextAppearance_Hyperlink, link, R.drawable.ic_link)
         }
 
         val companyTv = userDetails.company?.let { company ->
-            if(company.isEmpty() or company.isBlank()) return@let null
-            buildTextView(R.style.App_TextAppearance_Company, company,R.drawable.ic_company)
+            if (company.isEmpty() or company.isBlank()) return@let null
+            buildTextView(R.style.App_TextAppearance_Company, company, R.drawable.ic_company)
         }
 
         val twitterTv = userDetails.twitter_username?.let { twitter ->
-            if(twitter.isEmpty() or twitter.isBlank()) return@let null
+            if (twitter.isEmpty() or twitter.isBlank()) return@let null
             buildTextView(R.style.App_TextAppearance_Company, twitter, R.drawable.ic_twitter)
         }
 
@@ -148,7 +159,7 @@ class DetailsFragment : Fragment() {
 
         userDetails.html_url?.let { url ->
             binding.githubBtn.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW,url.toUri())
+                val intent = Intent(Intent.ACTION_VIEW, url.toUri())
                 startActivity(intent)
             }
         }
@@ -180,8 +191,8 @@ class DetailsFragment : Fragment() {
         findNavController().popBackStack()
     }
 
-    private fun setupViewpager(){
-        val vpAdapter = ConnectedPeopleAdapter(childFragmentManager, lifecycle)
+    private fun setupViewpager(login: String) {
+        vpAdapter = ConnectedPeopleAdapter(login, childFragmentManager, lifecycle)
         binding.viewPager.adapter = vpAdapter
     }
 

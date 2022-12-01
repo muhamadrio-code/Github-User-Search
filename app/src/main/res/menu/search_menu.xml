@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/menu_search"
+    <item android:id="@+id/favorite_menu"
         app:showAsAction="ifRoom"
-        android:title="@string/search"
-        android:icon="@drawable/ic_search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        android:title="@string/favorite"
+        android:icon="@drawable/ic_star_filled"
         />
 
-    <item android:id="@+id/menu_theme"
+    <item android:id="@+id/theme_menu"
         app:showAsAction="never"
         android:title="@string/theme"
+        android:icon="@drawable/ic_settings"
         />
 </menu>

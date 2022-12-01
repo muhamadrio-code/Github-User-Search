@@ -2,13 +2,11 @@ package com.muhammadrio.githubuser
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
-import androidx.fragment.app.DialogFragment
 import androidx.room.Room
 import com.muhammadrio.githubuser.data.remote.Retrofit
-import com.muhammadrio.githubuser.repository.UserRepository
-import com.muhammadrio.githubuser.repository.UserRepositoryImpl
+import com.muhammadrio.githubuser.repositories.UserRepository
+import com.muhammadrio.githubuser.repositories.UserRepositoryImpl
 import com.muhammadrio.githubuser.data.local.FavoritesUserDatabase
-import com.muhammadrio.githubuser.ui.dialogs.ThemeSelectionDialog
 
 object ServiceLocator {
 

@@ -1,8 +1,7 @@
 package com.muhammadrio.githubuser
 
 import android.app.Application
-import androidx.fragment.app.DialogFragment
-import com.muhammadrio.githubuser.repository.UserRepository
+import com.muhammadrio.githubuser.repositories.UserRepository
 
 class MainApplication : Application() {
 

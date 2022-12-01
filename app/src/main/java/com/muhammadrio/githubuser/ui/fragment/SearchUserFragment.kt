@@ -16,9 +16,9 @@ import androidx.annotation.StringRes
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,13 +30,12 @@ import com.muhammadrio.githubuser.provider.SuggestionProvider
 import com.muhammadrio.githubuser.ui.adapter.UserAdapter
 import com.muhammadrio.githubuser.ui.dialogs.LoadingDialog
 import com.muhammadrio.githubuser.ui.dialogs.ThemeSelectionDialog
-import com.muhammadrio.githubuser.viewmodel.HomeViewModel
-import com.muhammadrio.githubuser.viewmodel.HomeViewModelFactory
+import com.muhammadrio.githubuser.viewmodel.SearchUserViewModel
+import com.muhammadrio.githubuser.viewmodel.UserViewModelFactory
 
-class HomeFragment : Fragment(),
+class SearchUserFragment : Fragment(),
     SearchView.OnQueryTextListener,
-    SearchView.OnSuggestionListener
-{
+    SearchView.OnSuggestionListener {
 
     companion object {
         const val THEME_SELECTION_TAG = "com.muhammadrio.ui.dialogs.ThemeSelectionDialog"
@@ -47,8 +46,8 @@ class HomeFragment : Fragment(),
     private lateinit var searchView: SearchView
     private lateinit var loadingDialog: LoadingDialog
     private val themeSelectionDialog = ThemeSelectionDialog()
-    private val viewModel: HomeViewModel by viewModels {
-        HomeViewModelFactory((requireActivity().applicationContext as MainApplication).userRepository)
+    private val viewModel: SearchUserViewModel by viewModels {
+        UserViewModelFactory((requireActivity().applicationContext as MainApplication).userRepository)
     }
 
     private lateinit var adapter: UserAdapter
@@ -67,14 +66,19 @@ class HomeFragment : Fragment(),
     }
 
     private fun setupToolbar() {
-        val menuItem = binding.toolbar.menu.findItem(R.id.menu_search)
-        val themeItem = binding.toolbar.menu.findItem(R.id.menu_theme)
-        themeItem.setOnMenuItemClickListener {
-            viewModel.onThemeMenuClicked()
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.favorite_menu -> {
+                    viewModel.requestNavigation(
+                        SearchUserFragmentDirections.actionSearchUserFragmentToFavoriteUserFragment()
+                    )
+                }
+                R.id.theme_menu -> viewModel.requestThemeSelectionDialog()
+            }
+
             true
         }
-
-        searchView = menuItem?.actionView as SearchView
+        searchView = binding.searchBar
         val searchManager =
             requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val inputFilters = arrayOf(
@@ -88,7 +92,6 @@ class HomeFragment : Fragment(),
             )
         searchView.findViewById<TextView>(R.id.search_src_text)?.filters = inputFilters
         searchView.setOnQueryTextListener(this)
-        searchView.queryHint = requireContext().getString(R.string.search_hint)
         searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
         searchView.setOnSuggestionListener(this)
     }
@@ -102,10 +105,12 @@ class HomeFragment : Fragment(),
                         R.string.no_data_tittle,
                         R.string.no_data_message
                     )
+                    showRecyclerView(false)
                 }
                 is QueryStatus.OnSuccess -> {
                     loadingDialog.dismiss()
                     hideErrorMessage()
+                    showRecyclerView(true)
                 }
                 is QueryStatus.OnFailure -> {
                     val message = status.errorMessage
@@ -114,10 +119,12 @@ class HomeFragment : Fragment(),
                         message = message.body
                     )
                     loadingDialog.dismiss()
+                    showRecyclerView(false)
                 }
                 is QueryStatus.OnLoading -> {
                     hideErrorMessage()
                     hideKeyboard()
+                    showRecyclerView(false)
                     loadingDialog.show()
                 }
             }
@@ -125,8 +132,13 @@ class HomeFragment : Fragment(),
 
         viewModel.users.observe(viewLifecycleOwner) { users ->
             users ?: return@observe
-            binding.rcvUserList.isVisible = true
             adapter.submitList(users)
+        }
+
+        viewModel.navDirection.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { direction ->
+                startNavigate(direction)
+            }
         }
 
         viewModel.showSelectionThemeDialog.observe(viewLifecycleOwner) { event ->
@@ -136,6 +148,10 @@ class HomeFragment : Fragment(),
         }
     }
 
+    private fun showRecyclerView(visible:Boolean) {
+        binding.rcvUserList.isVisible = visible
+    }
+
     private fun showErrorMessage(
         @DrawableRes icon: Int = 0,
         @StringRes title: Int,
@@ -143,7 +159,6 @@ class HomeFragment : Fragment(),
     ) {
         binding.apply {
             llErrorMessageContainer.isVisible = true
-            rcvUserList.isVisible = false
             val iconDrawable =
                 runCatching { ContextCompat.getDrawable(requireContext(), icon) }.getOrNull()
             tvMessageHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(
@@ -158,10 +173,12 @@ class HomeFragment : Fragment(),
     }
 
     private fun setupRecyclerView() {
-        adapter = UserAdapter()
+        adapter = UserAdapter(viewModel)
         binding.rcvUserList.adapter = adapter
         adapter.setOnItemClickListener {
-            navigateToDetailsFragment(it.login)
+            viewModel.requestNavigation(
+                SearchUserFragmentDirections.actionGlobalDetailsFragment(it.login)
+            )
         }
         val layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -214,9 +231,7 @@ class HomeFragment : Fragment(),
 
     override fun onQueryTextChange(newText: String?): Boolean = false
 
-    private fun navigateToDetailsFragment(userLogin: String) {
-        val action =
-            HomeFragmentDirections.actionSearchUserFragmentToDetailsFragment(userLogin)
-        findNavController().navigate(action)
+    private fun startNavigate(directions: NavDirections) {
+        findNavController().navigate(directions)
     }
 }

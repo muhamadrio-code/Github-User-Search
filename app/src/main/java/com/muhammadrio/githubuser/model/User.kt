@@ -1,6 +1,7 @@
 package com.muhammadrio.githubuser.model
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import com.google.gson.annotations.SerializedName
 
 @Entity(
@@ -63,5 +64,11 @@ data class User(
     val type: String,
 
     @SerializedName("url")
-    val url: String
-)
+    val url: String,
+    var isFavorite : Boolean = false
+) {
+    @Ignore
+    fun setIsFavorite(bol: Boolean){
+        isFavorite = bol
+    }
+}

@@ -13,8 +13,7 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
             <androidx.constraintlayout.motion.widget.MotionLayout
                 android:id="@+id/profileMotionLayout"
                 android:layout_width="match_parent"
@@ -141,6 +140,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             app:layout_collapseMode="pin"
+            app:tabRippleColor="@android:color/transparent"
             app:tabGravity="fill"
             app:tabMaxWidth="0dp"
             app:tabMode="fixed"

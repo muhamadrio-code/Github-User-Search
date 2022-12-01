@@ -65,7 +65,7 @@ class FavoriteUserDaoTest {
     }
 
     @Test
-    fun insertFavoriteUser() = runTest {
+    fun insert_favorite_user() = runTest {
         dao.insertFavoriteUser(userTest)
 
         val allFavoriteUser = dao.getFavoriteUsers().getOrAwaitValue()
@@ -74,7 +74,16 @@ class FavoriteUserDaoTest {
     }
 
     @Test
-    fun deleteFavoriteUser() = runTest {
+    fun test_get_favorite_user() = runTest {
+        dao.insertFavoriteUser(userTest)
+
+        val allFavoriteUser = dao.getFavoriteUser(1).getOrAwaitValue()
+
+        assertThat(allFavoriteUser).isEqualTo(userTest)
+    }
+
+    @Test
+    fun delete_favorite_user() = runTest {
         dao.insertFavoriteUser(userTest)
         dao.deleteFavoriteUser(userTest)
 
@@ -84,7 +93,7 @@ class FavoriteUserDaoTest {
     }
 
     @Test
-    fun clearAllFavoriteUser() = runTest {
+    fun clear_all_favorite_user() = runTest {
         val userTest1 = User(
             avatarUrl = "",
             eventsUrl = "",
@@ -158,4 +167,72 @@ class FavoriteUserDaoTest {
         val allFavoriteUser = dao.getFavoriteUsers().getOrAwaitValue()
         assertThat(allFavoriteUser).isEmpty()
     }
+
+
+    @Test
+    fun test_favorite_user_with_given_id_exist_return_true() = runTest {
+        val userTest1 = User(
+            avatarUrl = "",
+            eventsUrl = "",
+            followersUrl = "",
+            followingUrl = "",
+            gistsUrl = "",
+            gravatarId = "",
+            htmlUrl = "",
+            id = 1,
+            login = "rio",
+            nodeId = "",
+            organizationsUrl = "",
+            receivedEventsUrl = "",
+            reposUrl = "",
+            score = 0,
+            siteAdmin = false,
+            starredUrl = "",
+            subscriptionsUrl = "",
+            type = "",
+            url = ""
+        )
+
+        dao.insertFavoriteUser(userTest1)
+
+        val given = dao.isFavoriteUser(userTest1.id)
+
+        assertThat(given).isTrue()
+    }
+
+    @Test
+    fun test_favorite_user_with_given_id_not_exist_return_false() = runTest {
+        val userTest1 = User(
+            avatarUrl = "",
+            eventsUrl = "",
+            followersUrl = "",
+            followingUrl = "",
+            gistsUrl = "",
+            gravatarId = "",
+            htmlUrl = "",
+            id = 1,
+            login = "rio",
+            nodeId = "",
+            organizationsUrl = "",
+            receivedEventsUrl = "",
+            reposUrl = "",
+            score = 0,
+            siteAdmin = false,
+            starredUrl = "",
+            subscriptionsUrl = "",
+            type = "",
+            url = ""
+        )
+
+        dao.insertFavoriteUser(userTest1)
+
+        val given = dao.isFavoriteUser(0)
+
+        assertThat(given).isFalse()
+    }
+
+
+
+
+
 }

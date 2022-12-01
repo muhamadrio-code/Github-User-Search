@@ -1,4 +1,4 @@
-package com.muhammadrio.githubuser.repository
+package com.muhammadrio.githubuser.repositories
 
 import androidx.lifecycle.LiveData
 import com.muhammadrio.githubuser.R
@@ -92,14 +92,13 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun getFavoriteUsers(): LiveData<List<User>> {
-        return withContext(dispatcher) {
-            favoriteUserDao.getFavoriteUsers()
-        }
+    override fun getFavoriteUsers(): LiveData<List<User>> {
+        return favoriteUserDao.getFavoriteUsers()
     }
 
     override suspend fun insertFavoriteUser(user: User) {
         withContext(dispatcher) {
+            user.setIsFavorite(true)
             favoriteUserDao.insertFavoriteUser(user)
         }
     }
@@ -113,6 +112,12 @@ class UserRepositoryImpl(
     override suspend fun clearFavoriteUsers() {
         withContext(dispatcher) {
             favoriteUserDao.clearFavoriteUser()
+        }
+    }
+
+    override suspend fun checkIsFavoriteUser(id: Int): Boolean {
+        return withContext(dispatcher){
+            favoriteUserDao.isFavoriteUser(id)
         }
     }
 

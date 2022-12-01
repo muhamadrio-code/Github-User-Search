@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="16dp">
+    android:paddingHorizontal="8dp">
 
     <ImageView
         android:id="@+id/ivProfile_picture"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginVertical="8dp"
-        android:layout_marginEnd="16sp"
         android:contentDescription="@string/profile_picture"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,15 +22,33 @@
         android:id="@+id/tvUser_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="8dp"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
         android:textSize="20sp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@id/ivProfile_picture"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/favoriteBtn"
         app:layout_constraintStart_toEndOf="@id/ivProfile_picture"
         app:layout_constraintTop_toTopOf="@id/ivProfile_picture"
         tools:text="Muhammad Rio" />
+
+    <CheckBox
+        android:id="@+id/favoriteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:background="@drawable/fav_button_backgound"
+        android:button="@android:color/transparent"
+        android:drawableStart="@drawable/favorite_star"
+        android:paddingHorizontal="8dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/favorite"
+        android:textColor="@drawable/checked_color"
+        app:layout_constraintBottom_toBottomOf="@id/ivProfile_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivProfile_picture"
+        tools:ignore="TouchTargetSizeCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

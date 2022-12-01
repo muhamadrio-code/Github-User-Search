@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Github User</string>
-    <string name="search">search</string>
-    <string name="home">Home</string>
-
     <string name="no_data_tittle">No data</string>
     <string name="no_data_message">Tidak ada data.</string>
 
@@ -27,7 +24,7 @@
     <string name="not_modified_tittle">304 Not Modified.</string>
     <string name="not_modified_message">Error, resource tidak tersedia.</string>
 
-    <string name="search_hint">Cari</string>
+    <string name="search_hint">Cari user</string>
     <string name="app_label">Github User</string>
 
     <string name="no_followers">User tidak memiliki pengikut.</string>
@@ -47,4 +44,8 @@
     <string name="select_theme">Pilih tema</string>
     <string name="cancel">Batal</string>
     <string name="oke">Oke</string>
+    <string name="favorite">Favorite</string>
+    <string name="favorite_user_empty">Kammu tidak memiliki user favorite.</string>
+    <string name="clear">Clear</string>
+    <string name="confirmation_clear_all">Hapus semua favorite user ?</string>
 </resources>

@@ -2,6 +2,7 @@ package com.muhammadrio.githubuser.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,8 +11,11 @@ import coil.transform.CircleCropTransformation
 import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.databinding.UserItemBinding
 import com.muhammadrio.githubuser.model.User
+import com.muhammadrio.githubuser.viewmodel.UserViewModel
 
-class UserAdapter : ListAdapter<User, UserAdapter.UserViewHolder>(DiffCallback()) {
+class UserAdapter(
+    private val userViewModel: UserViewModel
+) : ListAdapter<User, UserAdapter.UserViewHolder>(DiffCallback()) {
 
     private var clickListener: ((User) -> Unit)? = null
 
@@ -23,6 +27,7 @@ class UserAdapter : ListAdapter<User, UserAdapter.UserViewHolder>(DiffCallback()
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             binding.tvUserName.text = item.login
+            binding.favoriteBtn.isChecked = item.isFavorite
             binding.ivProfilePicture.load(item.avatarUrl, builder = {
                 placeholder(R.drawable.image_placeholder)
                 transformations(CircleCropTransformation())
@@ -30,6 +35,15 @@ class UserAdapter : ListAdapter<User, UserAdapter.UserViewHolder>(DiffCallback()
             })
             binding.root.setOnClickListener {
                 clickListener?.invoke(item)
+            }
+            binding.favoriteBtn.setOnClickListener {
+                val isChecked = binding.favoriteBtn.isChecked
+                item.setIsFavorite(isChecked)
+                if (isChecked){
+                    userViewModel.insertFavoriteUser(item)
+                } else {
+                    userViewModel.deleteFavoriteUser(item)
+                }
             }
         }
     }

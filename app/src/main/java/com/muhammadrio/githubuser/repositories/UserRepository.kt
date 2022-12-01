@@ -1,4 +1,4 @@
-package com.muhammadrio.githubuser.repository
+package com.muhammadrio.githubuser.repositories
 
 import androidx.lifecycle.LiveData
 import com.muhammadrio.githubuser.model.User
@@ -17,7 +17,9 @@ interface UserRepository {
 
     suspend fun getFollowing(userLogin: String): Result<List<User>>
 
-    suspend fun getFavoriteUsers(): LiveData<List<User>>
+    fun getFavoriteUsers(): LiveData<List<User>>
+
+    suspend fun checkIsFavoriteUser(id:Int): Boolean
 
     suspend fun insertFavoriteUser(user:User)
 

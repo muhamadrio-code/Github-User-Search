@@ -8,15 +8,31 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        app:elevation="0dp"
+        app:liftOnScroll="false"
         >
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
+            style="@style/MyTheme.App.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:menu="@menu/search_menu"
-            style="@style/MyTheme.App.Toolbar"
-            app:title="@string/home" />
+            android:elevation="0dp"
+            >
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/search_bar"
+                app:queryHint="@string/search_hint"
+                app:iconifiedByDefault="false"
+                app:showDividers="beginning"
+                app:closeIcon="@drawable/ic_close"
+                app:queryBackground="@android:color/transparent"
+                android:background="@drawable/search_view_bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -24,10 +40,10 @@
         android:id="@+id/rcvUserList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:visibility="gone"
-        android:paddingVertical="16dp"
         android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingVertical="16dp"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:itemCount="10"
@@ -38,36 +54,34 @@
         android:id="@+id/llError_message_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="visible"
-        >
+        android:layout_margin="32dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvMessage_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            tools:text="@string/no_data_tittle"
+            android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textAlignment="center"
-            tools:drawableTopCompat="@drawable/ic_box_empty"
             app:layout_anchorGravity="center"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:drawableTopCompat="@drawable/ic_box_empty"
+            tools:text="@string/no_data_tittle" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvMessageBody"
             android:layout_width="wrap_content"
-            android:textColor="?attr/colorOnSurfaceVariant"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            tools:text="@string/no_data_message"
             android:textAlignment="center"
+            android:textColor="?attr/colorOnSurfaceVariant"
             app:layout_anchorGravity="center"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:text="@string/no_data_message" />
     </LinearLayout>
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

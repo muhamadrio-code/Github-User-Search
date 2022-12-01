@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/searchUserFragment"
-        android:name="com.muhammadrio.githubuser.ui.fragment.HomeFragment"
+        android:name="com.muhammadrio.githubuser.ui.fragment.SearchUserFragment"
         android:label="SearchUserFragment"
         tools:layout="@layout/fragment_search_user">
         <action
-            android:id="@+id/action_searchUserFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
+            android:id="@+id/action_searchUserFragment_to_favoriteUserFragment"
+            app:destination="@id/favoriteUserFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
@@ -22,4 +22,13 @@
             android:name="user_login"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/favoriteUserFragment"
+        android:name="com.muhammadrio.githubuser.ui.fragment.FavoriteUserFragment"
+        android:label="FavoriteUserFragment" />
+    <action android:id="@+id/action_global_detailsFragment" app:destination="@id/detailsFragment" />
+    <fragment
+        android:id="@+id/connectedPeopleFragment"
+        android:name="com.muhammadrio.githubuser.ui.fragment.ConnectedPeopleFragment"
+        android:label="ConnectedPeopleFragment" />
 </navigation>
