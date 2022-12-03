@@ -24,10 +24,12 @@
                 app:layoutDescription="@xml/fragment_details_xml_profilemotionlayout_scene">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/githubBtn"
-                    style="@style/App.GithubButton"
+                    android:id="@+id/githubBtn1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    style="@style/App.GithubButton"
+                    android:alpha="0"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -76,13 +78,16 @@
             </androidx.constraintlayout.motion.widget.MotionLayout>
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorSurface"
+                android:elevation="0dp"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp"
-                app:contentInsetStartWithNavigation="0dp"
+                app:navigationIcon="@drawable/ic_arrow_back"
                 app:layout_collapseMode="pin">
 
                 <androidx.constraintlayout.motion.widget.MotionLayout
@@ -91,42 +96,29 @@
                     android:layout_height="match_parent"
                     app:layoutDescription="@xml/fragment_details_xml_motionlayouttoolbar_scene">
 
-                    <View
-                        android:id="@+id/backgroundView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:alpha="0"
-                        android:background="?attr/colorPrimary"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
                     <TextView
                         android:id="@+id/toolbarTitle"
                         style="@style/App.TextAppearance.CollapseToolbar.Tittle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:alpha="0"
-                        app:layout_constraintBottom_toBottomOf="@id/navigationBackBtn"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/navigationBackBtn"
-                        app:layout_constraintTop_toTopOf="@id/navigationBackBtn"
-                        tools:text="John Wick" />
-
-                    <ImageButton
-                        android:id="@+id/navigationBackBtn"
-                        style="@style/Theme.App.NavigationButton"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_marginStart="16dp"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="@string/go_back"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/githubBtn2"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="SpeakableTextPresentCheck" />
+                        tools:text="John Wick" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/githubBtn2"
+                        style="@style/App.GithubButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:alpha="0"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                 </androidx.constraintlayout.motion.widget.MotionLayout>
 

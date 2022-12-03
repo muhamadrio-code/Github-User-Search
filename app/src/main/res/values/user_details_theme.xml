@@ -26,7 +26,7 @@
         <item name="android:layout_marginBottom">16dp</item>
     </style>
 
-    <style name="App.TextAppearance.Company" parent="App.TextAppearance.UserDetails">
+    <style name="App.TextAppearance.Default" parent="App.TextAppearance.UserDetails">
         <item name="drawableStartCompat">@drawable/ic_company</item>
         <item name="android:drawableStart">@drawable/ic_company</item>
     </style>

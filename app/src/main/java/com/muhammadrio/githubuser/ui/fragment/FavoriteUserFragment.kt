@@ -35,14 +35,10 @@ class FavoriteUserFragment : Fragment() {
     ): View {
         binding = FragmentFavoriteUserBinding.inflate(layoutInflater)
         userAdapter = UserAdapter(viewModel)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         subscribeObserver()
         setupRecyclerView()
         setupToolbar()
+        return binding.root
     }
 
     private fun setupToolbar() {
@@ -76,7 +72,7 @@ class FavoriteUserFragment : Fragment() {
             }
         }
 
-        viewModel.favoriteUsers.observe(viewLifecycleOwner) {
+        viewModel.favoriteUsers.observe(requireActivity()) {
             if (it == null || it.isEmpty()) {
                 viewModel.requestErrorState(
                     ErrorMessage(
@@ -94,7 +90,7 @@ class FavoriteUserFragment : Fragment() {
         }
 
         viewModel.requestEvent.observe(viewLifecycleOwner) { requestEvent ->
-            if (requestEvent){
+            if (requestEvent) {
                 val confirmDialog = AlertDialog.Builder(requireContext())
                     .setMessage(getString(R.string.confirmation_clear_all))
                     .setOnDismissListener {

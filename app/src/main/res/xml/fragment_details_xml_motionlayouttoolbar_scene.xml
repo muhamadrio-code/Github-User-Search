@@ -1,97 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
-        motion:duration="1000"
-        motion:motionInterpolator="linear">
-        <KeyFrameSet>
-            <KeyAttribute
-                android:alpha="1"
-                motion:framePosition="5"
-                motion:motionTarget="@+id/backgroundView" />
-            <KeyAttribute
-                motion:framePosition="15"
-                motion:motionTarget="@+id/navigationBackBtn" />
-            <KeyAttribute
-                android:alpha="0.1"
-                motion:framePosition="40"
-                motion:motionTarget="@+id/toolbarTitle" />
-            <KeyAttribute
-                android:alpha="1"
-                motion:framePosition="45"
-                motion:motionTarget="@+id/toolbarTitle" />
-            <KeyAttribute
-                motion:framePosition="15"
-                motion:motionTarget="@+id/navigationBackBtn">
-                <CustomAttribute
-                    motion:attributeName="colorFilter"
-                    motion:customColorValue="?attr/colorOnPrimary" />
-            </KeyAttribute>
-        </KeyFrameSet>
+        motion:duration="1000">
+       <KeyFrameSet>
+           <KeyAttribute
+               motion:motionTarget="@+id/toolbarTitle"
+               motion:framePosition="40"
+               android:alpha="0.1" />
+           <KeyAttribute
+               motion:motionTarget="@+id/toolbarTitle"
+               motion:framePosition="45"
+               android:alpha="1" />
+           <KeyAttribute
+               motion:motionTarget="@+id/githubBtn2"
+               motion:framePosition="40"
+               android:alpha="0.1" />
+           <KeyAttribute
+               motion:motionTarget="@+id/githubBtn2"
+               motion:framePosition="45"
+               android:alpha="1" />
+       </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
         <Constraint
-            android:id="@+id/navigationBackBtn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintTop_toTopOf="parent">
-            <CustomAttribute
-                motion:attributeName="colorFilter"
-                motion:customColorValue="?attr/colorOnSurface" />
-        </Constraint>
-        <Constraint
             android:id="@+id/toolbarTitle"
+            motion:layout_constraintEnd_toStartOf="@+id/githubBtn2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+        <Constraint
+            android:id="@+id/githubBtn2"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="16dp"
             android:alpha="0"
-            motion:layout_constraintBottom_toBottomOf="@+id/backgroundView"
-            motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintStart_toEndOf="@id/navigationBackBtn"
             motion:layout_constraintTop_toTopOf="parent" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
-            android:id="@+id/backgroundView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="1"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintHorizontal_bias="0.5"
-            motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintTop_toTopOf="parent" />
-        <Constraint
             android:id="@+id/toolbarTitle"
+            motion:layout_constraintEnd_toStartOf="@+id/githubBtn2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="1"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+        <Constraint
+            android:id="@+id/githubBtn2"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="16dp"
             android:alpha="1"
-            motion:layout_constraintBottom_toBottomOf="@+id/backgroundView"
-            motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintStart_toEndOf="@id/navigationBackBtn"
             motion:layout_constraintTop_toTopOf="parent" />
-        <Constraint
-            android:id="@+id/navigationBackBtn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintTop_toTopOf="parent">
-            <CustomAttribute
-                motion:attributeName="colorFilter"
-                motion:customColorValue="?attr/colorOnPrimary" />
-        </Constraint>
     </ConstraintSet>
 </MotionScene>

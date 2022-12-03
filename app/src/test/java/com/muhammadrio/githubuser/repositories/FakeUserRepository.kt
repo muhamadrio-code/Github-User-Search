@@ -1,11 +1,18 @@
 package com.muhammadrio.githubuser.repositories
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.muhammadrio.githubuser.data.Result
 import com.muhammadrio.githubuser.model.User
 import com.muhammadrio.githubuser.model.UserDetails
 
 class FakeUserRepository : UserRepository {
+
+    private val users = mutableSetOf<User>()
+    private val favoriteUsers = mutableSetOf<User>()
+    private val observableUsers = MutableLiveData(users.toList())
+
+
     override suspend fun getUsers(q: String): Result<List<User>> {
         TODO("Not yet implemented")
     }

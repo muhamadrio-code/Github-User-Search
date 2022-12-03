@@ -24,7 +24,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.textview.MaterialTextView
 import com.muhammadrio.githubuser.MainApplication
 import com.muhammadrio.githubuser.R
-import com.muhammadrio.githubuser.data.Result
+import com.muhammadrio.githubuser.data.QueryStatus
 import com.muhammadrio.githubuser.databinding.FragmentDetailsBinding
 import com.muhammadrio.githubuser.model.UserDetails
 import com.muhammadrio.githubuser.ui.adapter.ConnectedPeopleAdapter
@@ -65,9 +65,6 @@ class DetailsFragment : Fragment() {
             binding.profileMotionLayout.progress = seekProgress
         }
         binding.appbarLayout.addOnOffsetChangedListener(offsetChangedListener)
-        binding.navigationBackBtn.setOnClickListener {
-            popBackStack()
-        }
     }
 
     override fun onDestroy() {
@@ -77,6 +74,9 @@ class DetailsFragment : Fragment() {
 
     private fun setupToolbar(title: String) {
         binding.toolbarTitle.text = title
+        binding.toolbar.setNavigationOnClickListener {
+            popBackStack()
+        }
     }
 
     private fun buildTextView(
@@ -97,24 +97,23 @@ class DetailsFragment : Fragment() {
     }
 
     private fun subscribeObserver() {
-        viewModel.userDetails.observe(viewLifecycleOwner) { result ->
-            result ?: return@observe
-            when (result) {
-                is Result.Failure -> {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(result.errorMessage.body),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    popBackStack()
-                }
-                is Result.Success -> {
-                    result.value.login?.let { login ->
-                        setupViewpager(login)
-                        setupTabLayout()
-                    }
-                    setupContent(result.value)
-                }
+        viewModel.userDetails.observe(viewLifecycleOwner) { userDetails ->
+            userDetails ?: return@observe
+            userDetails.login.let { login ->
+                setupViewpager(login)
+                setupTabLayout()
+            }
+            setupContent(userDetails)
+        }
+
+        viewModel.queryStatus.observe(viewLifecycleOwner) { status ->
+            if (status is QueryStatus.OnFailure) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(status.errorMessage.body),
+                    Toast.LENGTH_LONG
+                ).show()
+                popBackStack()
             }
         }
     }
@@ -146,20 +145,25 @@ class DetailsFragment : Fragment() {
 
         val companyTv = userDetails.company?.let { company ->
             if (company.isEmpty() or company.isBlank()) return@let null
-            buildTextView(R.style.App_TextAppearance_Company, company, R.drawable.ic_company)
+            buildTextView(R.style.App_TextAppearance_Default, company, R.drawable.ic_company)
         }
 
         val twitterTv = userDetails.twitter_username?.let { twitter ->
             if (twitter.isEmpty() or twitter.isBlank()) return@let null
-            buildTextView(R.style.App_TextAppearance_Company, twitter, R.drawable.ic_twitter)
+            buildTextView(R.style.App_TextAppearance_Default, twitter, R.drawable.ic_twitter)
         }
 
         val name = userDetails.name ?: userDetails.login
         val login = userDetails.login
 
         userDetails.html_url?.let { url ->
-            binding.githubBtn.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+            binding.githubBtn1.alpha = 1f
+            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+
+            binding.githubBtn1.setOnClickListener {
+                startActivity(intent)
+            }
+            binding.githubBtn2.setOnClickListener {
                 startActivity(intent)
             }
         }
@@ -184,7 +188,8 @@ class DetailsFragment : Fragment() {
             }
         }
 
-        name?.let { setupToolbar(title = name) }
+        setupToolbar(title = name)
+
     }
 
     private fun popBackStack() {

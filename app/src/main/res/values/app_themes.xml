@@ -12,8 +12,8 @@
     <style name="App.TextAppearance.CollapseToolbar.Tittle" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:fontFamily">@font/jetbrains_mono_reguler</item>
         <item name="fontFamily">@font/jetbrains_mono_reguler</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginEnd">16dp</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
