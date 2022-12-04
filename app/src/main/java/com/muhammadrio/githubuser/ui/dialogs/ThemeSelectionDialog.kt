@@ -1,9 +1,7 @@
 package com.muhammadrio.githubuser.ui.dialogs
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.DialogFragment

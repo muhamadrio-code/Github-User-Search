@@ -11,13 +11,6 @@ const val MAX_QUERY_LENGTH = 144
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-fun Context.showToast(text:String){
-    Toast.makeText(this,text,Toast.LENGTH_LONG).show()
-}
-
-fun runLogger(text:String){
-    Log.d("APP_DEBUG",text)
-}
 
 /**
  * Used as a wrapper for data that is exposed via a LiveData that represents an event.

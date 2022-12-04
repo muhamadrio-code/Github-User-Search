@@ -1,15 +1,13 @@
 package com.muhammadrio.githubuser.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
-import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.PreferencesKeys
+import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.dataStore
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 
 class MainActivity : AppCompatActivity() {
 

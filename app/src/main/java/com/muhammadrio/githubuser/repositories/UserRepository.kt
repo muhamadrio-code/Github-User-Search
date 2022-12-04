@@ -1,9 +1,9 @@
 package com.muhammadrio.githubuser.repositories
 
 import androidx.lifecycle.LiveData
+import com.muhammadrio.githubuser.data.Result
 import com.muhammadrio.githubuser.model.User
 import com.muhammadrio.githubuser.model.UserDetails
-import com.muhammadrio.githubuser.data.Result
 
 interface UserRepository {
 

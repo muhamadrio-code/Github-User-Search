@@ -2,13 +2,13 @@ package com.muhammadrio.githubuser.repositories
 
 import androidx.lifecycle.LiveData
 import com.muhammadrio.githubuser.R
+import com.muhammadrio.githubuser.data.ErrorMessage
+import com.muhammadrio.githubuser.data.Result
+import com.muhammadrio.githubuser.data.local.FavoriteUserDao
+import com.muhammadrio.githubuser.data.remote.GithubUserApi
+import com.muhammadrio.githubuser.data.remote.Retrofit
 import com.muhammadrio.githubuser.model.User
 import com.muhammadrio.githubuser.model.UserDetails
-import com.muhammadrio.githubuser.data.local.FavoriteUserDao
-import com.muhammadrio.githubuser.data.ErrorMessage
-import com.muhammadrio.githubuser.data.remote.GithubUserApi
-import com.muhammadrio.githubuser.data.Result
-import com.muhammadrio.githubuser.data.remote.Retrofit
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

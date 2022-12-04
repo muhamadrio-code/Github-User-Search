@@ -1,6 +1,5 @@
 package com.muhammadrio.githubuser.data.remote
 
-import com.muhammadrio.githubuser.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.Response
 

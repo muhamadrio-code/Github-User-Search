@@ -3,10 +3,10 @@ package com.muhammadrio.githubuser
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.room.Room
+import com.muhammadrio.githubuser.data.local.FavoritesUserDatabase
 import com.muhammadrio.githubuser.data.remote.Retrofit
 import com.muhammadrio.githubuser.repositories.UserRepository
 import com.muhammadrio.githubuser.repositories.UserRepositoryImpl
-import com.muhammadrio.githubuser.data.local.FavoritesUserDatabase
 
 object ServiceLocator {
 
