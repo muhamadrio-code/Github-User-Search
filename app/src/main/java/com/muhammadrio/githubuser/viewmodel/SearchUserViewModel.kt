@@ -1,10 +1,11 @@
 package com.muhammadrio.githubuser.viewmodel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.muhammadrio.githubuser.Event
 import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.data.ErrorMessage
-import com.muhammadrio.githubuser.data.QueryStatus
 import com.muhammadrio.githubuser.data.Result
 import com.muhammadrio.githubuser.model.User
 import com.muhammadrio.githubuser.repositories.UserRepository

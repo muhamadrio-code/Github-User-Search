@@ -7,6 +7,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 
+const val MAX_QUERY_LENGTH = 144
+
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 fun Context.showToast(text:String){
