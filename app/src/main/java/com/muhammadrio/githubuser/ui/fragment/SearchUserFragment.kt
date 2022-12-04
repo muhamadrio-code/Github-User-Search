@@ -22,6 +22,7 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.muhammadrio.githubuser.MAX_QUERY_LENGTH
 import com.muhammadrio.githubuser.MainApplication
 import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.data.QueryStatus
@@ -82,7 +83,7 @@ class SearchUserFragment : Fragment(),
         val searchManager =
             requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val inputFilters = arrayOf(
-            InputFilter.LengthFilter(144)
+            InputFilter.LengthFilter(MAX_QUERY_LENGTH)
         )
         suggestionProvider =
             SearchRecentSuggestions(
