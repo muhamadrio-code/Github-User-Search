@@ -1,12 +1,12 @@
 package com.muhammadrio.githubuser.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.muhammadrio.githubuser.Event
 import com.muhammadrio.githubuser.R
+import com.muhammadrio.githubuser.combineWith
 import com.muhammadrio.githubuser.data.ErrorMessage
 import com.muhammadrio.githubuser.data.Result
+import com.muhammadrio.githubuser.model.QueryParams
 import com.muhammadrio.githubuser.model.User
 import com.muhammadrio.githubuser.repositories.UserRepository
 import kotlinx.coroutines.launch
@@ -15,30 +15,50 @@ class SearchUserViewModel(
     private val userRepository: UserRepository,
 ) : UserViewModel(userRepository) {
 
-    private var userPage = 1
-    private lateinit var loginName: String
+    private var currentQueryParams: QueryParams? = null
 
     private val tempUsers = mutableSetOf<User>()
 
     private val _users = MutableLiveData<List<User>>()
-    val users: LiveData<List<User>> = _users
+    val users: LiveData<List<User>> = _users.combineWith(userRepository.getFavoriteUsers()) { mUsers, favUsers ->
+        if (mUsers == null) return@combineWith emptyList()
+        if (favUsers == null) return@combineWith mUsers
+
+        val hashMap = hashMapOf<Int,User>()
+        val newList = mutableListOf<User>()
+        favUsers.forEach { user -> hashMap[user.id] = user }
+        mUsers.forEach { user ->
+            val isFavorite = hashMap[user.id] != null
+            val copy = user.copy()
+            copy.setIsFavorite(isFavorite)
+            newList.add(copy)
+        }
+        newList
+    }
 
     private val _showSelectionThemeDialog = MutableLiveData<Event<Boolean>>()
     val showSelectionThemeDialog: LiveData<Event<Boolean>> = _showSelectionThemeDialog
 
+
     fun searchUsers(query: String) {
-        loginName = query
+        currentQueryParams = QueryParams(query = query)
         setToLoadingState()
-        viewModelScope.launch {
-            val queryResult = userRepository.getUsers(query)
-            handleSearchUsersResult(queryResult)
+        currentQueryParams?.let {
+            viewModelScope.launch {
+                val queryResult = userRepository.getUsers(it)
+                handleSearchUsersResult(queryResult)
+            }
         }
     }
 
     fun searchNextPage() {
+        currentQueryParams ?: return
         viewModelScope.launch {
-            userPage++
-            val result = userRepository.getUsersAtPage(loginName, userPage)
+            currentQueryParams = currentQueryParams?.let {
+                QueryParams(it.query, page = it.page + 1)
+            }
+
+            val result = userRepository.getUsers(currentQueryParams!!)
             if (result is Result.Success) setUsers(result.value)
         }
     }
@@ -48,7 +68,7 @@ class SearchUserViewModel(
         requestLoadingState()
     }
 
-    private fun handleSearchUsersResult(result: Result<List<User>>) {
+    private fun handleSearchUsersResult(result: Result<List<User>>){
         when (result) {
             is Result.Success -> handleResultSuccess(result.value)
             is Result.Failure -> requestErrorState(result.errorMessage)
@@ -56,14 +76,8 @@ class SearchUserViewModel(
     }
 
     private fun setUsers(users: List<User>) {
-        viewModelScope.launch {
-            tempUsers += users.map { mUser ->
-                val isFavorite = userRepository.checkIsFavoriteUser(mUser.id)
-                if (isFavorite) mUser.setIsFavorite(true)
-                mUser
-            }
-            _users.postValue(tempUsers.toList())
-        }
+        tempUsers += users
+        _users.postValue(tempUsers.toList())
     }
 
     private fun handleResultSuccess(users: List<User>) {

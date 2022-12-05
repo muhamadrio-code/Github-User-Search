@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.muhammadrio.githubuser.data.ErrorMessage
 import com.muhammadrio.githubuser.data.Result
+import com.muhammadrio.githubuser.model.QueryParams
 import com.muhammadrio.githubuser.model.User
 import com.muhammadrio.githubuser.model.UserDetails
 
@@ -56,6 +57,13 @@ class FakeUserRepository : UserRepository {
             url = ""
         )
     )
+
+    private val usersWithPage = mapOf(
+        1 to usersPage1,
+        2 to usersPage2
+    )
+
+
     private val favoriteUsers = hashMapOf<Int, User>()
     private val userDetails = UserDetails(
         avatar_url = "",
@@ -97,28 +105,6 @@ class FakeUserRepository : UserRepository {
 
     private var shouldReturnError = false
 
-    fun getUserForTest(): User = User(
-        avatarUrl = "",
-        eventsUrl = "",
-        followersUrl = "",
-        followingUrl = "",
-        gistsUrl = "",
-        gravatarId = "",
-        htmlUrl = "",
-        id = 1,
-        login = "rio",
-        nodeId = "",
-        organizationsUrl = "",
-        receivedEventsUrl = "",
-        reposUrl = "",
-        score = 0,
-        siteAdmin = false,
-        starredUrl = "",
-        subscriptionsUrl = "",
-        type = "",
-        url = ""
-    )
-
     fun setShouldReturnError(value: Boolean) {
         shouldReturnError = value
     }
@@ -127,14 +113,16 @@ class FakeUserRepository : UserRepository {
         observableFavoriteUsers.value = favoriteUsers.values.toList()
     }
 
-    override suspend fun getUsers(q: String): Result<List<User>> {
+    override suspend fun getUsers(queryParams: QueryParams): Result<List<User>> {
         return if (shouldReturnError) {
             Result.Failure(ErrorMessage(0, 0, 0), Exception())
         } else {
+            val q = queryParams.query
             if (q.isEmpty() or q.isBlank()){
                 Result.Success(emptyList())
             } else {
-                Result.Success(usersPage1)
+                val users = usersWithPage[queryParams.page] ?: emptyList()
+                Result.Success(users)
             }
         }
     }
@@ -144,14 +132,6 @@ class FakeUserRepository : UserRepository {
             Result.Failure(ErrorMessage(0, 0, 0), Exception())
         } else {
             Result.Success(userDetails)
-        }
-    }
-
-    override suspend fun getUsersAtPage(q: String, page: Int): Result<List<User>> {
-        return if (shouldReturnError) {
-            Result.Failure(ErrorMessage(0, 0, 0), Exception())
-        } else {
-            Result.Success(usersPage1 + usersPage2)
         }
     }
 

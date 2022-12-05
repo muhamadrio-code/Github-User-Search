@@ -37,7 +37,6 @@ class UserAdapter(
             }
             binding.favoriteBtn.setOnClickListener {
                 val isChecked = binding.favoriteBtn.isChecked
-                item.setIsFavorite(isChecked)
                 if (isChecked){
                     userViewModel.insertFavoriteUser(item)
                 } else {

@@ -46,7 +46,6 @@ class SearchUserFragment : Fragment(),
     private lateinit var suggestionProvider: SearchRecentSuggestions
     private lateinit var searchView: SearchView
     private lateinit var loadingDialog: LoadingDialog
-    private val themeSelectionDialog = ThemeSelectionDialog()
     private val viewModel: SearchUserViewModel by viewModels {
         UserViewModelFactory((requireActivity().applicationContext as MainApplication).userRepository)
     }
@@ -125,7 +124,6 @@ class SearchUserFragment : Fragment(),
                 is QueryStatus.OnLoading -> {
                     hideErrorMessage()
                     hideKeyboard()
-                    showRecyclerView(false)
                     loadingDialog.show()
                 }
             }
@@ -133,6 +131,7 @@ class SearchUserFragment : Fragment(),
 
         viewModel.users.observe(viewLifecycleOwner) { users ->
             users ?: return@observe
+            if (users.isEmpty()) showRecyclerView(false)
             adapter.submitList(users)
         }
 
@@ -144,6 +143,7 @@ class SearchUserFragment : Fragment(),
 
         viewModel.showSelectionThemeDialog.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
+                val themeSelectionDialog = ThemeSelectionDialog()
                 themeSelectionDialog.showNow(childFragmentManager, THEME_SELECTION_TAG)
             }
         }
@@ -176,6 +176,7 @@ class SearchUserFragment : Fragment(),
     private fun setupRecyclerView() {
         adapter = UserAdapter(viewModel)
         binding.rcvUserList.adapter = adapter
+        binding.rcvUserList.itemAnimator = null
         adapter.setOnItemClickListener {
             viewModel.requestNavigation(
                 SearchUserFragmentDirections.actionGlobalDetailsFragment(it.login)
@@ -201,7 +202,7 @@ class SearchUserFragment : Fragment(),
     }
 
     override fun onSuggestionSelect(position: Int): Boolean {
-        return true
+        return false
     }
 
     override fun onSuggestionClick(position: Int): Boolean {

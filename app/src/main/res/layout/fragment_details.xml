@@ -30,6 +30,7 @@
                     android:layout_marginEnd="16dp"
                     style="@style/App.GithubButton"
                     android:alpha="0"
+                    android:enabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -94,6 +95,7 @@
                     android:id="@+id/motionLayoutToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:visibility="visible"
                     app:layoutDescription="@xml/fragment_details_xml_motionlayouttoolbar_scene">
 
                     <TextView
@@ -115,6 +117,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
                         android:alpha="0"
+                        android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"

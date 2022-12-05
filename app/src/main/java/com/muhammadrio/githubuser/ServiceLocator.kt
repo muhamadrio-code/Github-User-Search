@@ -10,7 +10,6 @@ import com.muhammadrio.githubuser.repositories.UserRepositoryImpl
 
 object ServiceLocator {
 
-    private val lock = Any()
     private var database: FavoritesUserDatabase? = null
 
     @Volatile
@@ -19,13 +18,17 @@ object ServiceLocator {
 
     fun provideTasksRepository(context: Context): UserRepository {
         synchronized(this) {
-            return tasksRepository ?: createUserRepository(context)
+            return tasksRepository ?: run {
+                val repo = createUserRepository(context)
+                tasksRepository = repo
+                repo
+            }
         }
     }
 
     private fun createUserRepository(context: Context) : UserRepository {
         return UserRepositoryImpl(
-            createDataBase(context).favoritesUserDao,
+            createDataBase(context.applicationContext).favoritesUserDao,
             Retrofit.userApi
         )
     }
@@ -37,20 +40,6 @@ object ServiceLocator {
         ).build()
         database = result
         return result
-    }
-
-    @VisibleForTesting
-    fun resetRepository() {
-        synchronized(lock) {
-
-            // Clear all data to avoid test pollution.
-            database?.apply {
-                clearAllTables()
-                close()
-            }
-            database = null
-            tasksRepository = null
-        }
     }
 
 }

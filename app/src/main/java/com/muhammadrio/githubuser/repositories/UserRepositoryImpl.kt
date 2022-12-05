@@ -1,12 +1,14 @@
 package com.muhammadrio.githubuser.repositories
 
 import androidx.lifecycle.LiveData
+import com.muhammadrio.githubuser.DEFAULT_PER_PAGE
 import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.data.ErrorMessage
 import com.muhammadrio.githubuser.data.Result
 import com.muhammadrio.githubuser.data.local.FavoriteUserDao
 import com.muhammadrio.githubuser.data.remote.GithubUserApi
 import com.muhammadrio.githubuser.data.remote.Retrofit
+import com.muhammadrio.githubuser.model.QueryParams
 import com.muhammadrio.githubuser.model.User
 import com.muhammadrio.githubuser.model.UserDetails
 import kotlinx.coroutines.CoroutineDispatcher
@@ -35,34 +37,17 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun getUsers(q: String): Result<List<User>> {
+    override suspend fun getUsers(queryParams: QueryParams): Result<List<User>> {
         return withContext(dispatcher) {
             runCatching {
-                val response = withContext(dispatcher) {
-                    githubUserApi.searchUsers(q)
-                }
+                val response = githubUserApi.searchUsers(queryParams.query,queryParams.page)
                 when (val result = handleResponse(response)) {
                     is Result.Success -> {
                         val totalItems = result.value.totalCount
-                        totalPages = ceil(totalItems.toFloat() / ITEMS_PER_PAGE).toInt()
+                        totalPages = ceil(totalItems.toFloat() / DEFAULT_PER_PAGE).toInt()
                         Result.Success(result.value.items)
                     }
-                    else -> result as Result.Failure
-                }
-            }.getOrElse { t ->
-                handleException(t)
-            }
-        }
-    }
-
-    override suspend fun getUsersAtPage(q: String, page: Int): Result<List<User>> {
-        if (page > totalPages) return Result.Success(emptyList())
-        return withContext(dispatcher) {
-            runCatching {
-                val response = githubUserApi.searchUsers(q, page)
-                when (val result = handleResponse(response)) {
-                    is Result.Success -> Result.Success(result.value.items)
-                    else -> result as Result.Failure
+                    is Result.Failure -> result
                 }
             }.getOrElse { t ->
                 handleException(t)
@@ -195,10 +180,6 @@ class UserRepositoryImpl(
                 )
             )
         }
-    }
-
-    companion object {
-        private const val ITEMS_PER_PAGE = 30
     }
 
 }

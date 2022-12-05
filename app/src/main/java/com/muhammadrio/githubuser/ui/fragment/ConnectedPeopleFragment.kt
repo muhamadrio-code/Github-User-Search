@@ -6,26 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.muhammadrio.githubuser.MainApplication
 import com.muhammadrio.githubuser.data.QueryStatus
 import com.muhammadrio.githubuser.databinding.LayoutUserListBinding
 import com.muhammadrio.githubuser.model.User
 import com.muhammadrio.githubuser.ui.adapter.UserAdapter
 import com.muhammadrio.githubuser.viewmodel.ConnectedPeopleViewModel
-import com.muhammadrio.githubuser.viewmodel.UserViewModelFactory
 
 abstract class ConnectedPeopleFragment : Fragment() {
 
     private lateinit var binding: LayoutUserListBinding
     private lateinit var userAdapter: UserAdapter
 
-    protected val viewModel: ConnectedPeopleViewModel by viewModels {
-        UserViewModelFactory(
-            (requireActivity().applicationContext as MainApplication).userRepository
-        )
-    }
+    abstract val viewModel: ConnectedPeopleViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
