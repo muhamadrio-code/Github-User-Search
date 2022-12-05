@@ -14,5 +14,4 @@ class LoadingDialog(context: Context) : AlertDialog(context) {
         setCancelable(false)
         window?.setBackgroundDrawable(ColorDrawable(0))
     }
-
 }

@@ -46,11 +46,10 @@ class FavoriteUserFragment : Fragment() {
             findNavController().popBackStack()
         }
         binding.toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.clear_menu -> {
-                    viewModel.requestClearAll()
-                }
+            if(it.itemId == R.id.clear_menu) {
+                viewModel.requestClearAll()
             }
+
             true
         }
     }
@@ -72,7 +71,7 @@ class FavoriteUserFragment : Fragment() {
             }
         }
 
-        viewModel.favoriteUsers.observe(requireActivity()) {
+        viewModel.favoriteUsers.observe(viewLifecycleOwner) {
             if (it == null || it.isEmpty()) {
                 viewModel.requestErrorState(
                     ErrorMessage(

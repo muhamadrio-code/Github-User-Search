@@ -38,16 +38,14 @@ class UserRepositoryImpl(
     override suspend fun getUsers(q: String): Result<List<User>> {
         return withContext(dispatcher) {
             runCatching {
-                val response = withContext(dispatcher) {
-                    githubUserApi.searchUsers(q)
-                }
+                val response = githubUserApi.searchUsers(q)
                 when (val result = handleResponse(response)) {
                     is Result.Success -> {
                         val totalItems = result.value.totalCount
                         totalPages = ceil(totalItems.toFloat() / ITEMS_PER_PAGE).toInt()
                         Result.Success(result.value.items)
                     }
-                    else -> result as Result.Failure
+                    is Result.Failure -> result
                 }
             }.getOrElse { t ->
                 handleException(t)

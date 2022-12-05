@@ -85,6 +85,7 @@ class SearchUserViewModelTest {
     fun test_search_user_next_page_expect_success() = runTest {
         viewModel.searchUsers("rio")
         runCurrent()
+
         val given1 = viewModel.users.getOrAwaitValueTest()
 
         viewModel.searchNextPage()

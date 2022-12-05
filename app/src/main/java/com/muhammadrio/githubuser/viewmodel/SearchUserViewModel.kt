@@ -1,8 +1,6 @@
 package com.muhammadrio.githubuser.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.muhammadrio.githubuser.Event
 import com.muhammadrio.githubuser.R
 import com.muhammadrio.githubuser.data.ErrorMessage
@@ -21,10 +19,37 @@ class SearchUserViewModel(
     private val tempUsers = mutableSetOf<User>()
 
     private val _users = MutableLiveData<List<User>>()
-    val users: LiveData<List<User>> = _users
+    val users: LiveData<List<User>> = Transformations.switchMap(_users) { mUsers ->
+        liveData {
+            val ls = mUsers.map { mUser ->
+                val isFavorite = userRepository.checkIsFavoriteUser(mUser.id)
+                mUser.setIsFavorite(isFavorite)
+                mUser
+            }
+            emit(ls)
+        }
+    }
 
     private val _showSelectionThemeDialog = MutableLiveData<Event<Boolean>>()
     val showSelectionThemeDialog: LiveData<Event<Boolean>> = _showSelectionThemeDialog
+
+    fun refreshUsers(){
+        _users.value ?: return
+        if(_users.value!!.isEmpty()) return
+
+        viewModelScope.launch {
+            val list = mutableListOf<User>()
+            users.value?.map {
+                if (!userRepository.checkIsFavoriteUser(it.id) == it.isFavorite){
+                    val newUser = it.copy()
+                    list.add(newUser)
+                } else {
+                    list.add(it)
+                }
+            }
+            _users.postValue(list)
+        }
+    }
 
     fun searchUsers(query: String) {
         loginName = query
@@ -56,14 +81,8 @@ class SearchUserViewModel(
     }
 
     private fun setUsers(users: List<User>) {
-        viewModelScope.launch {
-            tempUsers += users.map { mUser ->
-                val isFavorite = userRepository.checkIsFavoriteUser(mUser.id)
-                if (isFavorite) mUser.setIsFavorite(true)
-                mUser
-            }
-            _users.postValue(tempUsers.toList())
-        }
+        tempUsers += users
+        _users.postValue(tempUsers.toList())
     }
 
     private fun handleResultSuccess(users: List<User>) {

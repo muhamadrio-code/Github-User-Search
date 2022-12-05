@@ -46,7 +46,6 @@ class SearchUserFragment : Fragment(),
     private lateinit var suggestionProvider: SearchRecentSuggestions
     private lateinit var searchView: SearchView
     private lateinit var loadingDialog: LoadingDialog
-    private val themeSelectionDialog = ThemeSelectionDialog()
     private val viewModel: SearchUserViewModel by viewModels {
         UserViewModelFactory((requireActivity().applicationContext as MainApplication).userRepository)
     }
@@ -64,6 +63,11 @@ class SearchUserFragment : Fragment(),
         subscribeObserver()
         loadingDialog = LoadingDialog(requireContext())
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshUsers()
     }
 
     private fun setupToolbar() {
@@ -125,7 +129,6 @@ class SearchUserFragment : Fragment(),
                 is QueryStatus.OnLoading -> {
                     hideErrorMessage()
                     hideKeyboard()
-                    showRecyclerView(false)
                     loadingDialog.show()
                 }
             }
@@ -144,6 +147,7 @@ class SearchUserFragment : Fragment(),
 
         viewModel.showSelectionThemeDialog.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
+                val themeSelectionDialog = ThemeSelectionDialog()
                 themeSelectionDialog.showNow(childFragmentManager, THEME_SELECTION_TAG)
             }
         }
@@ -201,7 +205,7 @@ class SearchUserFragment : Fragment(),
     }
 
     override fun onSuggestionSelect(position: Int): Boolean {
-        return true
+        return false
     }
 
     override fun onSuggestionClick(position: Int): Boolean {

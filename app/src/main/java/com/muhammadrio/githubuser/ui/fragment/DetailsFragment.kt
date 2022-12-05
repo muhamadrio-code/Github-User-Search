@@ -37,7 +37,9 @@ class DetailsFragment : Fragment() {
     private lateinit var vpAdapter: ConnectedPeopleAdapter
     private val args: DetailsFragmentArgs by navArgs()
     private val viewModel: UserDetailsViewModel by viewModels {
-        UserViewModelFactory((requireActivity().applicationContext as MainApplication).userRepository)
+        UserViewModelFactory(
+            (requireActivity().applicationContext as MainApplication).userRepository
+        )
     }
 
     private var offsetChangedListener: AppBarLayout.OnOffsetChangedListener? = null
@@ -158,6 +160,7 @@ class DetailsFragment : Fragment() {
 
         userDetails.html_url?.let { url ->
             binding.githubBtn1.alpha = 1f
+            binding.githubBtn1.isEnabled = true
             val intent = Intent(Intent.ACTION_VIEW, url.toUri())
 
             binding.githubBtn1.setOnClickListener {
@@ -197,7 +200,7 @@ class DetailsFragment : Fragment() {
     }
 
     private fun setupViewpager(login: String) {
-        vpAdapter = ConnectedPeopleAdapter(login, childFragmentManager, lifecycle)
+        vpAdapter = ConnectedPeopleAdapter(login, requireActivity().supportFragmentManager, lifecycle)
         binding.viewPager.adapter = vpAdapter
     }
 
