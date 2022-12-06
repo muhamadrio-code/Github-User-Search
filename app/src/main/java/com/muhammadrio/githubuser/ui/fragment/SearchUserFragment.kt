@@ -65,6 +65,11 @@ class SearchUserFragment : Fragment(),
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshUsers()
+    }
+
     private fun setupToolbar() {
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
