@@ -123,6 +123,7 @@ class SearchUserFragment : Fragment(),
                     hideErrorMessage()
                     hideKeyboard()
                     showLoading(true)
+                    showRecyclerView(false)
                 }
             }
         }
@@ -153,6 +154,7 @@ class SearchUserFragment : Fragment(),
 
     private fun showRecyclerView(visible:Boolean) {
         binding.rcvUserList.isVisible = visible
+        if (!visible) adapter.submitList(emptyList())
     }
 
     private fun showErrorMessage(

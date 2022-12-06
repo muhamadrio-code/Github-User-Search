@@ -50,8 +50,8 @@
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/loadingIndicator"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_gravity="center_horizontal|top"
         android:layout_margin="32dp"
         android:indeterminate="true"
