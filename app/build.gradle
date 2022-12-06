@@ -24,6 +24,10 @@ android {
         viewBinding true
     }
 
+    testOptions {
+        animationsDisabled = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -45,6 +49,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.test:core:1.5.0"
 
     def lifecycle_version = "2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -81,8 +86,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
 
     //airbnb
-    def lottieVersion = "5.2.0"
-    implementation "com.airbnb.android:lottie:$lottieVersion"
     implementation 'com.airbnb.android:paris:2.0.0'
 
     // Preferences dataStore
@@ -94,6 +97,7 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     testImplementation "com.google.truth:truth:1.0.1"
+    testImplementation "org.mockito:mockito-core:2.28.2"
 
     // Instrumented Unit Tests
     androidTestImplementation "junit:junit:4.13.2"

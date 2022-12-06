@@ -10,27 +10,26 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorSurface"
         app:elevation="0dp"
-        app:liftOnScroll="false"
-        >
+        app:liftOnScroll="false">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             style="@style/MyTheme.App.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/search_menu"
             android:elevation="0dp"
-            >
+            app:menu="@menu/search_menu">
+
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/search_bar"
-                app:queryHint="@string/search_hint"
-                app:iconifiedByDefault="false"
-                app:showDividers="beginning"
-                app:closeIcon="@drawable/ic_close"
-                app:queryBackground="@android:color/transparent"
-                android:background="@drawable/search_view_bg"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:background="@drawable/search_view_bg"
+                app:closeIcon="@drawable/ic_close"
+                app:iconifiedByDefault="false"
+                app:queryBackground="@android:color/transparent"
+                app:queryHint="@string/search_hint"
+                app:showDividers="beginning" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
@@ -49,15 +48,25 @@
         tools:itemCount="10"
         tools:listitem="@layout/user_item" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loadingIndicator"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_margin="32dp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
 
     <LinearLayout
         android:id="@+id/llError_message_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="32dp"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="visible"
-        android:layout_margin="32dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.google.android.material.textview.MaterialTextView

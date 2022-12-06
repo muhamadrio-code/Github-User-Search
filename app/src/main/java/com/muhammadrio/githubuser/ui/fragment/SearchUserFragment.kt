@@ -29,7 +29,6 @@ import com.muhammadrio.githubuser.data.QueryStatus
 import com.muhammadrio.githubuser.databinding.FragmentSearchUserBinding
 import com.muhammadrio.githubuser.provider.SuggestionProvider
 import com.muhammadrio.githubuser.ui.adapter.UserAdapter
-import com.muhammadrio.githubuser.ui.dialogs.LoadingDialog
 import com.muhammadrio.githubuser.ui.dialogs.ThemeSelectionDialog
 import com.muhammadrio.githubuser.viewmodel.SearchUserViewModel
 import com.muhammadrio.githubuser.viewmodel.UserViewModelFactory
@@ -45,7 +44,6 @@ class SearchUserFragment : Fragment(),
     private lateinit var binding: FragmentSearchUserBinding
     private lateinit var suggestionProvider: SearchRecentSuggestions
     private lateinit var searchView: SearchView
-    private lateinit var loadingDialog: LoadingDialog
     private val viewModel: SearchUserViewModel by viewModels {
         UserViewModelFactory((requireActivity().applicationContext as MainApplication).userRepository)
     }
@@ -61,13 +59,7 @@ class SearchUserFragment : Fragment(),
         setupToolbar()
         setupRecyclerView()
         subscribeObserver()
-        loadingDialog = LoadingDialog(requireContext())
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.refreshUsers()
     }
 
     private fun setupToolbar() {
@@ -111,9 +103,10 @@ class SearchUserFragment : Fragment(),
                         R.string.no_data_message
                     )
                     showRecyclerView(false)
+                    showLoading(false)
                 }
                 is QueryStatus.OnSuccess -> {
-                    loadingDialog.dismiss()
+                    showLoading(false)
                     hideErrorMessage()
                     showRecyclerView(true)
                 }
@@ -123,13 +116,13 @@ class SearchUserFragment : Fragment(),
                         title = message.header,
                         message = message.body
                     )
-                    loadingDialog.dismiss()
                     showRecyclerView(false)
+                    showLoading(false)
                 }
                 is QueryStatus.OnLoading -> {
                     hideErrorMessage()
                     hideKeyboard()
-                    loadingDialog.show()
+                    showLoading(true)
                 }
             }
         }
@@ -152,6 +145,10 @@ class SearchUserFragment : Fragment(),
                 themeSelectionDialog.showNow(childFragmentManager, THEME_SELECTION_TAG)
             }
         }
+    }
+
+    private fun showLoading(visible: Boolean) {
+        binding.loadingIndicator.isVisible = visible
     }
 
     private fun showRecyclerView(visible:Boolean) {

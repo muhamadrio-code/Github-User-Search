@@ -27,6 +27,7 @@ class ConnectedPeopleViewModel(
     }
 
     fun getFollowers() {
+        requestLoadingState()
         viewModelScope.launch {
             val result = userRepository.getFollowers(mUserLogin)
             val value = getResultValueOrEmpty(result, ErrorMessage(0, R.string.no_followers, 0))
@@ -35,6 +36,7 @@ class ConnectedPeopleViewModel(
     }
 
     fun getFollowing() {
+        requestLoadingState()
         viewModelScope.launch {
             val result = userRepository.getFollowing(mUserLogin)
             val value = getResultValueOrEmpty(result, ErrorMessage(0, R.string.no_following, 0))
