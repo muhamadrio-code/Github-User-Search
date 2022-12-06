@@ -105,6 +105,28 @@ class FakeUserRepository : UserRepository {
 
     private var shouldReturnError = false
 
+    fun getUserForTest(): User = User(
+        avatarUrl = "",
+        eventsUrl = "",
+        followersUrl = "",
+        followingUrl = "",
+        gistsUrl = "",
+        gravatarId = "",
+        htmlUrl = "",
+        id = 2,
+        login = "mamang racing",
+        nodeId = "",
+        organizationsUrl = "",
+        receivedEventsUrl = "",
+        reposUrl = "",
+        score = 0,
+        siteAdmin = false,
+        starredUrl = "",
+        subscriptionsUrl = "",
+        type = "",
+        url = ""
+    )
+
     fun setShouldReturnError(value: Boolean) {
         shouldReturnError = value
     }
@@ -118,7 +140,7 @@ class FakeUserRepository : UserRepository {
             Result.Failure(ErrorMessage(0, 0, 0), Exception())
         } else {
             val q = queryParams.query
-            if (q.isEmpty() or q.isBlank()){
+            if (q.isEmpty() or q.isBlank()) {
                 Result.Success(emptyList())
             } else {
                 val users = usersWithPage[queryParams.page] ?: emptyList()

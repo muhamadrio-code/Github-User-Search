@@ -33,56 +33,65 @@ class SearchUserViewModelTest {
     }
 
     @Test
-    fun test_search_user_with_empty_string() = runTest {
-        viewModel.searchUsers("")
-
-        runCurrent()
-        advanceUntilIdle()
-
-        val users = viewModel.users.getOrAwaitValueTest()
-        val queryStatus = viewModel.queryStatus.getOrAwaitValueTest()
-
-        assertThat(users).isEmpty()
-        assertThat(queryStatus).isInstanceOf(QueryStatus.OnFailure::class.java)
-    }
-
-    @Test
-    fun test_search_user_with_blank_string() = runTest {
-        viewModel.searchUsers("   ")
-
-        runCurrent()
-        advanceUntilIdle()
-
-        val users = viewModel.users.getOrAwaitValueTest()
-        val queryStatus = viewModel.queryStatus.getOrAwaitValueTest()
-
-        assertThat(users).isEmpty()
-        assertThat(queryStatus).isInstanceOf(QueryStatus.OnFailure::class.java)
-    }
-
-    @Test
-    fun test_search_user_with_valid_string() = runTest {
-        viewModel.searchUsers("rio")
-
-        runCurrent()
-        advanceUntilIdle()
-
-        val users = viewModel.users.getOrAwaitValueTest()
-        val queryStatus = viewModel.queryStatus.getOrAwaitValueTest()
-
-        assertThat(users).isNotEmpty()
-        assertThat(queryStatus).isInstanceOf(QueryStatus.OnSuccess::class.java)
-    }
-
-    @Test
-    fun test_query_status_onLoading_when_search_user() = runTest {
-        viewModel.searchUsers("")
+    fun `test query status onEmpty as initial status`() = runTest {
         val given = viewModel.queryStatus.getOrAwaitValueTest()
-        assertThat(given).isEqualTo(QueryStatus.OnLoading)
+        assertThat(given).isInstanceOf(QueryStatus.OnEmpty::class.java)
     }
 
     @Test
-    fun test_search_user_next_page_expect_success() = runTest {
+    fun `check query status isLoading on searchUser`(){
+        viewModel.searchUsers("")
+        val status = viewModel.queryStatus.getOrAwaitValueTest()
+        assertThat(status).isInstanceOf(QueryStatus.OnLoading::class.java)
+    }
+
+    @Test
+    fun `check query status isSuccess on searchUser finish expect success`() = runTest {
+        viewModel.searchUsers("rio")
+        runCurrent()
+        advanceUntilIdle()
+        val status = viewModel.queryStatus.getOrAwaitValueTest()
+        assertThat(status).isInstanceOf(QueryStatus.OnSuccess::class.java)
+    }
+
+    @Test
+    fun `check query status isFailure on searchUser finish expect failure`() = runTest {
+        viewModel.searchUsers("")
+        runCurrent()
+        advanceUntilIdle()
+        val status = viewModel.queryStatus.getOrAwaitValueTest()
+        assertThat(status).isInstanceOf(QueryStatus.OnFailure::class.java)
+    }
+
+    @Test
+    fun `test search user with empty string expect users livedata return empty`() = runTest {
+        viewModel.searchUsers("")
+        runCurrent()
+        advanceUntilIdle()
+        val users = viewModel.users.getOrAwaitValueTest()
+        assertThat(users).isEmpty()
+    }
+
+    @Test
+    fun `test search user with blank string expect users livedata return empty`() = runTest {
+        viewModel.searchUsers("   ")
+        runCurrent()
+        advanceUntilIdle()
+        val users = viewModel.users.getOrAwaitValueTest()
+        assertThat(users).isEmpty()
+    }
+
+    @Test
+    fun `test search user with valid string expect users livedata return NotEmpty`() = runTest {
+        viewModel.searchUsers("rio")
+        runCurrent()
+        advanceUntilIdle()
+        val users = viewModel.users.getOrAwaitValueTest()
+        assertThat(users).isNotEmpty()
+    }
+
+    @Test
+    fun `test search users next page expect success`() = runTest {
         viewModel.searchUsers("rio")
         runCurrent()
 
@@ -100,21 +109,18 @@ class SearchUserViewModelTest {
     }
 
     @Test
-    fun test_search_user_next_page_expect_failure() = runTest {
+    fun `test search users next page expect failure`() = runTest {
         viewModel.searchUsers("rio")
         runCurrent()
         val given1 = viewModel.users.getOrAwaitValueTest()
 
         userRepository.setShouldReturnError(true)
         viewModel.searchNextPage()
-        val queryStatus = viewModel.queryStatus.getOrAwaitValueTest()
-
         advanceUntilIdle()
 
         val given2 = viewModel.users.getOrAwaitValueTest()
 
         assertThat(given1).isEqualTo(given2)
-        assertThat(queryStatus).isInstanceOf(QueryStatus.OnSuccess::class.java)
     }
 
 
